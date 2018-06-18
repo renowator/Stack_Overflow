@@ -6,3 +6,7 @@
 2. Add ALL members of your team to this repo. For it to count, they must ACCEPT the invite.
 
 
+## Heroku login credentials
+
+    Username: scottpennd@gmail.com
+    password: csc648team4!
