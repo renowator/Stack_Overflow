@@ -1,6 +1,6 @@
-# Stock Overflow
+#Managing Stock Overflow
 
-A Node.js app using [Express 4](http://expressjs.com/).
+A Node.js app using [Express 4](http://expressjs.com/). A mock stock photo site.
 
 This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
 
