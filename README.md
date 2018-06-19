@@ -1,32 +1,25 @@
-# node-js-getting-started
+# Stock Overflow
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+A Node.js app using [Express 4](http://expressjs.com/).
 
 This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
 
 ## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
+Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed. Once this repository has been connected with Heroku, you may enter the following commands into a bash to run locally.
 
 ```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
+$ git clone https://github.com/CSC-648-SFSU/csc648-su18-Team04.git
+$ cd csc648-su18-Team04
+$ npm install # dependency may already be up to date
+$ heroku local web
 ```
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
 ## Deploying to Heroku
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+Merge the 'Development' branch with the 'Master' branch. Then deploy from Heroku's website by navigating to the tab Deploy and select the button Deploy Branch.
 
 ## Documentation
 
