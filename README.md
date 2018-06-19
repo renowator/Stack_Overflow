@@ -1,4 +1,4 @@
-#Managing Stock Overflow
+# Managing Stock Overflow
 
 A Node.js app using [Express 4](http://expressjs.com/). A mock stock photo site.
 
