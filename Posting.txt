@@ -1,0 +1,10 @@
+CREATE TABLE Posting (
+    ID              int,
+    Name            varchar(255),
+    Category        category,
+    Status          status,
+    UserID          int,
+    Image           varchar(255)
+);
+
+
