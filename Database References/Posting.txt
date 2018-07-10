@@ -1,0 +1,21 @@
+DROP TABLE Posting;
+
+CREATE TABLE Posting (
+    ID              int,
+    Name            varchar(255),
+    Category        category,
+    Status          status,
+    UserID          int,
+    Image           varchar(255)
+);
+
+INSERT INTO Posting VALUES(1, 'Tree leaves', 'Nature', 'Approved', 42, 'Tree.jpg');
+INSERT INTO Posting VALUES(2, 'Lightning above city', 'Nature', 'Approved', 42, 'Lightning.jpg');
+INSERT INTO Posting VALUES(3, 'Bear waving', 'Animals', 'Approved', 42, 'Bear.jpg');
+INSERT INTO Posting VALUES(4, 'Giraffes', 'Animals', 'Approved', 42, 'Giraffes.jpg');
+INSERT INTO Posting VALUES(5, 'Birds with Moon', 'Animals', 'Approved', 42, 'Birds.jpg');
+
+SELECT * FROM Posting;
+
+
+
