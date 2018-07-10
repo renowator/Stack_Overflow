@@ -1,10 +1,10 @@
 const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
-const {
-  Client
-} = require('pg');
+const { Client } = require('pg');
 
+//Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
+//That value is currently incorrect on my computer, leading to errors in local environment testing.
 const database = new Client({
   connectionString: 'postgres://rzolioxhicdcbq:2dcdefed515615296c818c19a1bae98a6dac3962ac5de97c5e200deb80539b08@ec2-23-21-166-148.compute-1.amazonaws.com:5432/df31neji5vbebi',
   ssl: true,
@@ -12,10 +12,16 @@ const database = new Client({
 
 database.connect();
 
+//The number of search results
 var results = 0;
 
+// This function is an intermediate function that passes the results of a database query
+// to the renderer. Currently it checks if the category is valid, then runs a query depending
+// on the result. In the future, we plan on handling the errors in a better way than ignoring them.
 function search(req, res, next) {
+  //The user's search term
   var searchTerm = req.query.search;
+  //The user's selected category
   var category = req.query.category;
 
   if (category === undefined || category === "") {
@@ -27,6 +33,7 @@ function search(req, res, next) {
         next();
       }
 
+      //The results are parsed as JSON into the image column String that points to a file.
       req.searchResult = result.rows.map(x => String(x.image));
       req.searchTerm = searchTerm;
       req.category = "";
@@ -60,6 +67,9 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .get('/vertical-prototype', search, (req, res) => {
+
+    //It is here that we pass the results of the query to the renderer.
+    //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
     res.render('pages/vertical-prototype', {
       results: searchResult.length,
