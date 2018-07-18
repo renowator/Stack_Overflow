@@ -111,6 +111,140 @@ body {
   .sidenav a {font-size: 18px;}
 }
 
+#container {
+position: fixed;
+width: 340px;
+height: 220px;
+top: 19%;
+left: 95%;
+margin-top: -140px;
+margin-left: -170px;
+   
+font-family: "Helvetica Neue", Helvetica, sans-serif;   
+color: #444;   
+-webkit-font-smoothing: antialiased;    background: #f0f0f0;
+
+}
+input[type=textusr],
+input[type=password] {
+    color: #777;
+    padding-left: 10px;
+    margin: 10px;
+    margin-top: 12px;
+    margin-left: 18px;
+    width: 290px;
+    height: 29px;
+}
+
+//AA starting here---style-------
+//body {font-family: Arial, Helvetica, sans-serif;}
+//* {box-sizing: border-box}
+input[type=text2], input[type=password2] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+/* Add a background color when the inputs get focus */
+input[type=text2]:focus, input[type=password2]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Set a style for all buttons */
+button2 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+button2:hover {
+    opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #474e5d;
+    padding-top: 50px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Style the horizontal ruler */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+ 
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+    }
+}
+//------end AA style--
 /* Search Bar */ 
 input[type=text] {
     width: 530px;
@@ -166,7 +300,52 @@ input[type=text] {
 <form>
   <input type="text" name="search" placeholder="Search..">
 </form>
+<!-- AA username and login-->
+   <div id="container">       
+<form>
+<label for="username">Username:</label>
+<input type="textusr" id="username" name="username">
+<label for="password">Password:</label>
+<input type="password" id="password" name="password">
+<div id="lower">
+<!--<input type="checkbox"><label for="checkbox">Keep me logged in</label> !-->
+<input type="submit" value="Login" style= "width: 120px">
 
+<button onclick="document.getElementById('id01').style.display='block'" style="width: 120px">Sign Up</button>
+<br> 
+<input type ="submit" value="Forgot Password" >
+
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+  <form class="modal-content" action="/action_page.php">
+    <div class="container">
+      <h1>Sign Up</h1>
+      <p>Please fill in this form to create an account.</p>
+      <hr>
+      <label for="email"><b>Email</b></label>
+      <input type="text2" placeholder="Enter Email" name="email" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password2" placeholder="Enter Password" name="psw" required>
+
+      <label for="psw-repeat"><b>Repeat Password</b></label>
+      <input type="password2" placeholder="Repeat Password" name="psw-repeat" required>
+      
+      <label>
+        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+      </label>
+
+      <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+      <div class="clearfix">
+        <button2 type="button2" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button2>
+        <button2 type="submit" class="signupbtn">Sign Up</button2>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- AA end -->
 <!-- Middle -->
 <div class="row"> 
     <div class="column">
@@ -191,7 +370,7 @@ input[type=text] {
     </div>
 </div>
 
-<!-- Footer -->
+<!-- Footer 
 <footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px"> 
   <i class="fa fa-facebook-official w3-hover-opacity"></i>
   <i class="fa fa-instagram w3-hover-opacity"></i>
@@ -200,7 +379,7 @@ input[type=text] {
   <i class="fa fa-twitter w3-hover-opacity"></i>
   <i class="fa fa-linkedin w3-hover-opacity"></i>
 </footer>
-    
+    -->
 <script>
 // Open and close sidebar
     function openNav() {
