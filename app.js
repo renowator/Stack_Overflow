@@ -78,6 +78,7 @@ express()
       category: req.category
     });
   })
+  .get('/upload', (req, res) => res.render('pages/upload'))
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
