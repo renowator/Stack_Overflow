@@ -65,7 +65,18 @@ express()
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
+  .get('/', search, (req, res) => {
+
+    //It is here that we pass the results of the query to the renderer.
+    //The page will dynamically load data based on the results.
+    var searchResult = req.searchResult;
+    res.render('pages/index', {
+      results: searchResult.length,
+      searchTerm: req.searchTerm,
+      searchResult: searchResult,
+      category: req.category
+    });
+  })
   .get('/vertical-prototype', search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.

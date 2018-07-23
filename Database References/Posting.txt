@@ -1,4 +1,5 @@
 DROP TABLE Posting;
+DROP TABLE Users;
 
 CREATE TABLE Posting (
     ID              int,
@@ -16,6 +17,18 @@ INSERT INTO Posting VALUES(4, 'Giraffes', 'Animals', 'Approved', 42, 'Giraffes.j
 INSERT INTO Posting VALUES(5, 'Birds with Moon', 'Animals', 'Approved', 42, 'Birds.jpg');
 
 SELECT * FROM Posting;
+
+CREATE TABLE User (
+    ID              int,
+    Username        varchar(255),
+    
+    Category        category,
+    Status          status,
+    UserID          int,
+    Image           varchar(255)
+);
+
+SELECT * FROM Users;
 
 
 
