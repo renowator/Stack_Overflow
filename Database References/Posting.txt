@@ -18,15 +18,17 @@ INSERT INTO Posting VALUES(5, 'Birds with Moon', 'Animals', 'Approved', 42, 'Bir
 
 SELECT * FROM Posting;
 
-CREATE TABLE User (
+CREATE TYPE privilege AS ENUM ('guest', 'user', 'admin');
+
+CREATE TABLE Users (
     ID              int,
     Username        varchar(255),
-    
-    Category        category,
-    Status          status,
-    UserID          int,
-    Image           varchar(255)
+    Password	    varchar(255),
+    Privilege	    privilege,
+    Postings        int[]
 );
+
+INSERT INTO Users VALUES(0, 'guest', '', 'guest', ARRAY[]::int[]);
 
 SELECT * FROM Users;
 
