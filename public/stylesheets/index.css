@@ -1,0 +1,331 @@
+
+body, h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+
+/* Top */
+/* Style the top navigation bar */
+.topnav {
+    overflow: hidden;
+    background-color: #444;
+}
+
+/* Style the topnav links */
+.topnav a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav .login:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav .signup {
+    background-color: #36b036;
+}
+
+/* Change color on hover */
+.topnav .signup:hover {
+    background-color: #3e8e41;
+}
+
+.largeimage {
+    position: relative;
+    text-align: center;
+}
+
+.background {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+}
+
+.centered {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color:white;
+    font-size: 300%;
+    font-weight: bold;
+}
+
+.search {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+}
+
+/* Search Bar */ 
+input[type=text] {
+    width: 730px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('../../images/searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 50px;
+}
+
+.vl {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    border-left: 6px solid white;
+    height: 100px;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    
+    width: 175px;
+    background-color: indianred;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button4 {border-radius: 12px;}
+
+.button:hover {
+    background-color: brown;
+}
+
+/* Middle */ 
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+}
+
+.column img {
+    margin-top: 10px;
+    vertical-align: middle;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+    .column {
+        -ms-flex: 50%;
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        -ms-flex: 100%;
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+/* The grid: Four equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 25%;
+    padding: 4px;
+}
+
+/* Style the images inside the grid */
+.column img {
+    cursor: pointer; 
+    opacity: 0.9;
+}
+
+.column img:hover {
+    opacity: 1;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.container {
+    position: relative;
+}
+.container .after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    display: none;
+    color: #FFF;
+}
+.container:hover .after {
+    display: block;
+    background: rgba(0, 0, 0, .6);
+    font-family: Arial;
+    padding: 20px;
+    font-size: 150%;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    margin-top: 10px;
+    background-color: #444;
+    padding: 100px;
+}
+
+/*AA starting here---style-------
+body {font-family: Arial, Helvetica, sans-serif;}
+{box-sizing: border-box}
+input[type=text2], input[type=password2] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+/* Add a background color when the inputs get focus 
+input[type=text2]:focus, input[type=password2]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Set a style for all buttons
+button2 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+button2:hover {
+    opacity:1;
+}
+
+/* Extra styles for the cancel button
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements
+.container {
+    padding: 16px;
+}
+
+/* The Modal (background)
+.modal {
+    display: none; /* Hidden by default
+    position: fixed; /* Stay in place 
+    z-index: 1; /* Sit on top 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width 
+    height: 100%; /* Full height 
+    overflow: auto; /* Enable scroll if needed 
+    background-color: #474e5d;
+    padding-top: 50px;
+}
+
+/* Modal Content/Box
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered 
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size 
+}
+
+/* Style the horizontal ruler
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+ 
+/* The Close Button (x)
+.close {
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+/* Clear floats
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+    }
+}
+/*------end AA style--*/
+
+
+
+
+

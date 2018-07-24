@@ -1,316 +1,152 @@
 <!DOCTYPE html>
 <html>
-<title>Stock Overflow</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="/jquery/jquery.js"></script>
-
-
-<style>
-body,h1 {font-family: "Montserrat", sans-serif}
-img {margin-bottom: -7px}
-.w3-row-padding img {margin-bottom: 12px}
-
-/* Middle */ 
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial;
-}
-
-.header {
-    text-align: center;
-    padding: 32px;
-}
-
-.row {
-    display: -ms-flexbox; /* IE10 */
-    display: flex;
-    -ms-flex-wrap: wrap; /* IE10 */
-    flex-wrap: wrap;
-    padding: 0 4px;
-}
-
-/* Create four equal columns that sits next to each other */
-.column {
-    -ms-flex: 25%; /* IE10 */
-    flex: 25%;
-    max-width: 25%;
-    padding: 0 4px;
-}
-
-.column img {
-    margin-top: 14px;
-    vertical-align: middle;
-}
-
-/* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 800px) {
-    .column {
-        -ms-flex: 50%;
-        flex: 50%;
-        max-width: 50%;
-    }
-}
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-    .column {
-        -ms-flex: 100%;
-        flex: 100%;
-        max-width: 100%;
-    }
-}
-
-/* Sidebar */
-
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
+    <head>
+        <title>Stock Overflow</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+        <script src="/jquery/jquery.js"></script>
+    </head>
+    <body>
+        
+        <!-- Top -->
+        <div class="topnav">
+            <a class="sitename" style="float:left; font-family: Verdana; font-size:150%" href="/">StockOverflow</a>
+            <a class="signup" style="padding-bottom:20px; padding-top:20px" href="#">Sign Up</a>
+            <a class="login" style="padding-bottom:20px; padding-top:20px;" href="#">Log In</a>
+            <a class="login" style="padding-bottom:20px; padding-top:20px;" href="about">About</a>
+        </div>
+        
+        <div class="largeimage">
+            <img class="background" src="/images/city.jpg">
+            <div class="centered">Your Ultimate Photo Destination</div>
+            <div class="search">
+            <input type="text" name="search" placeholder="Search..">
+            </div>
+            <div class="vl"></div>
+            <a class="button button4" href="upload"> Upload </a>
+        </div>
+        
+        <!-- Middle -->
+        <div class="row"> 
+            <div class="column">
+                <div class="container">
+                <img  src="/images/beach.jpg" style="width:100%">
+                <div class="after"> Beaches </div>
+                </div>
+            </div>     
+            <div class="column">   
+                <div class="container">
+                <img src="/images/candy.jpg" style="width:100%">
+                <div class="after"> Candy </div>
+                </div>
+            </div>      
+            <div class="column">
+                <div class="container">
+                <img src="/images/landscape2.jpg" style="width:100%">
+                <div class="after"> Landscapes </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="container">
+                <img src="/images/lion.jpg" style="width:100%">
+                <div class="after"> Animals </div>
+                </div>
+            </div>    
+        </div>
+        <div class="row"> 
+            <div class="column">
+                <div class="container">
+                <img src="/images/nature2.jpg" style="width:100%">
+                <div class="after"> Nature </div>
+                </div>
+            </div>     
+            <div class="column">   
+                <div class="container">
+                <img src="/images/cat.jpg" style="width:100%">
+                <div class="after"> Cats </div>
+                </div>
+            </div>      
+            <div class="column">
+                <div class="container">
+                <img src="/images/cityscape.jpg" style="width:100%">
+                <div class="after"> Cityscapes </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="container">
+                <img src="/images/ocean.jpg" style="width:100%">
+                <div class="after"> Oceans </div>
+                </div>
+            </div>    
+        </div>
+        <div class="row"> 
+            <div class="column">
+                <div class="container">
+                <img src="/images/hamburger.jpg" style="width:100%">
+                <div class="after"> Statues </div>
+                </div>
+            </div>     
+            <div class="column">   
+                <div class="container">
+                <img src="/images/festival.jpg" style="width:100%">
+                <div class="after"> Festivals </div>
+                </div>
+            </div>      
+            <div class="column">
+                <div class="container">
+                <img src="/images/nebula.jpg" style="width:100%">
+                <div class="after"> Space </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="container">
+                <img src="/images/cafe.jpg" style="width:100%">
+                <div class="after"> Cafes </div>
+                </div>
+            </div>    
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer"></div>
     
-}
+    </body>
+</html>
 
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-    text-align: center;
-}
+<!-- Header
+        <div class="w3-content" style="max-width:1500px">
+            <div class="w3-opacity">
+                <header class="w3-center w3-margin-bottom">
+                    <h1><b>STOCK OVERFLOW</b></h1>
+                </header>
+            </div>
+        </div>-->
+        
+        <!-- Tabs 
+        <div align="center" style="background-color:lightblue;">
+            <a class="active" href="#" style=" margin-right:10px;">Home Page</a>
+            <a href="about" style="  margin-right:10px;">About Us</a>
+            <a href="upload" style=" margin-right:10px; ">Upload Image</a>
+        </div> -->
 
-.sidenav a:hover {
-    color: #f1f1f1;
-}
+        <!-- Search Bar 
+        <form>
+            <input type="text" name="search" placeholder="Search..">
+        </form>-->
 
-.sidenav .closebtn {
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    padding-left: 370px;
-    color: #818181;
-    transition: 0.3s;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-#container {
-position: fixed;
-width: 340px;
-height: 220px;
-top: 19%;
-left: 95%;
-margin-top: -140px;
-margin-left: -170px;
-   
-font-family: "Helvetica Neue", Helvetica, sans-serif;   
-color: #444;   
--webkit-font-smoothing: antialiased;    background: #f0f0f0;
-
-}
-input[type=textusr],
-input[type=password] {
-    color: #777;
-    padding-left: 10px;
-    margin: 10px;
-    margin-top: 12px;
-    margin-left: 18px;
-    width: 290px;
-    height: 29px;
-}
-
-//AA starting here---style-------
-//body {font-family: Arial, Helvetica, sans-serif;}
-//* {box-sizing: border-box}
-input[type=text2], input[type=password2] {
-    width: 100%;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
-    background: #f1f1f1;
-}
-
-/* Add a background color when the inputs get focus */
-input[type=text2]:focus, input[type=password2]:focus {
-    background-color: #ddd;
-    outline: none;
-}
-
-/* Set a style for all buttons */
-button2 {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-}
-
-button2:hover {
-    opacity:1;
-}
-
-/* Extra styles for the cancel button */
-.cancelbtn {
-    padding: 14px 20px;
-    background-color: #f44336;
-}
-
-/* Float cancel and signup buttons and add an equal width */
-.cancelbtn, .signupbtn {
-  float: left;
-  width: 50%;
-}
-
-/* Add padding to container elements */
-.container {
-    padding: 16px;
-}
-
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: #474e5d;
-    padding-top: 50px;
-}
-
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-}
-
-/* Style the horizontal ruler */
-hr {
-    border: 1px solid #f1f1f1;
-    margin-bottom: 25px;
-}
- 
-/* The Close Button (x) */
-.close {
-    position: absolute;
-    right: 35px;
-    top: 15px;
-    font-size: 40px;
-    font-weight: bold;
-    color: #f1f1f1;
-}
-
-.close:hover,
-.close:focus {
-    color: #f44336;
-    cursor: pointer;
-}
-
-/* Clear floats */
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-/* Change styles for cancel button and signup button on extra small screens */
-@media screen and (max-width: 300px) {
-    .cancelbtn, .signupbtn {
-       width: 100%;
-    }
-}
-//------end AA style--
-/* Search Bar */ 
-input[type=text] {
-    width: 530px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('../../images/searchicon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 50px;
-    /*-webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;*/
-}
-
-/*input[type=text]:focus {
-    width: 100%;
-}*/
-
-</style>
-
-<body>
-    
-<!-- Sidebar button 
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-   --> 
-<!-- Sidebar 
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="#">Sign-Up</a>
-  <a href="#">Login</a>
-  <a href="/about">About</a>
-</div>
--->
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
-
-<!-- Header -->
-    <div class="w3-opacity">
-        <div class="w3-clear"></div>
-        <header class="w3-center w3-margin-bottom">
-            <h1><b>STOCK OVERFLOW</b></h1>
-        </header>
-    </div>
-</div>
-<div align="center" style="background-color:lightblue;">
-<a class="active" href="#" style=" margin-right:10px;">Home Page</a>
-<a href="about" style="  margin-right:10px;">About Us</a>
-<a href="upload" style=" margin-right:10px; ">Upload Image</a>
-</div>
-<!-- Search Bar -->
-<form>
-  <input type="text" name="search" placeholder="Search..">
-</form>
-<!-- AA username and login-->
-   <div id="container">       
-<form>
-<label for="username">Username:</label>
-<input type="textusr" id="username" name="username">
+        <!--     
+        AA username and login
+        <div id="container">       
+        <form>
+            <label for="username">Username:</label>
+                <input type="textusr" id="username" name="username">
 <label for="password">Password:</label>
 <input type="password" id="password" name="password">
 <div id="lower">
-<!--<input type="checkbox"><label for="checkbox">Keep me logged in</label> !-->
+<input type="checkbox"><label for="checkbox">Keep me logged in</label> !
 <input type="submit" value="Login" style= "width: 120px">
 
 <button onclick="document.getElementById('id01').style.display='block'" style="width: 120px">Sign Up</button>
@@ -349,53 +185,5 @@ input[type=text] {
 </div>
 </form>
 </div>
-<!-- AA end -->
-<!-- Middle -->
-<div>
-<div class="row"> 
-    <div class="column">
-        <img src="/images/beach.jpg" style="width:100%">
-        <img src="/images/candy.jpg" style="width:100%">
-        <img src="/images/landscape2.jpg" style="width:100%">
-    </div>    
-    <div class="column">
-        <img src="/images/lion.jpg" style="width:100%">
-        <img src="/images/nature2.jpg" style="width:100%">
-        <img src="/images/cat.jpg" style="width:100%">
-    </div>
-    <div class="column">
-        <img src="/images/cityscape.jpg" style="width:100%">
-        <img src="/images/ocean.jpg" style="width:100%">
-        <img src="/images/hamburger.jpg" style="width:100%">
-    </div>
-    <div class="column">
-        <img src="/images/festival.jpg" style="width:100%">
-        <img src="/images/nebula.jpg" style="width:100%">
-        <img src="/images/cafe.jpg" style="width:100%">
-    </div>
-</div>
-</div>
-<!-- Footer 
-<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px"> 
-  <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  <i class="fa fa-instagram w3-hover-opacity"></i>
-  <i class="fa fa-snapchat w3-hover-opacity"></i>
-  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-  <i class="fa fa-twitter w3-hover-opacity"></i>
-  <i class="fa fa-linkedin w3-hover-opacity"></i>
-</footer>
-    -->
-    <!--
-<script>
-// Open and close sidebar
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "500px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-</script>
 -->
-</body>
-</html>
+        
