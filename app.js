@@ -25,7 +25,28 @@ function register(req, res, next) {
 }
 
 function login(req, res, next) {
+  if (!req.session.user) {
+    req.session.user = 'guest'
+  }
   next();
+}
+
+function logout(req, res, next) {
+  req.session.user = 'guest';
+  res.locals = {
+     user: req.session.user
+   };
+  next();
+}
+
+function validateUser(req, res, next) {
+    if (!req.session.user) {
+      req.session.user = 'John'
+    }
+    res.locals = {
+     user: req.session.user
+   };
+    next();
 }
 
 // This function is an intermediate function that passes the results of a database query
@@ -74,6 +95,12 @@ function search(req, res, next) {
 }
 
 express()
+  .use(session({  
+                  secret: 'csc648-stock-overflow',
+                  resave: false,
+                  saveUninitialized: true
+               }))
+  .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
   .use(express.urlencoded())
@@ -92,18 +119,16 @@ express()
     });
   })
   .get('/login', (req, res) => res.render('pages/login'))
-  .post('/login', login, search, (req, res) => {
-    console.log(req.body.username)
+  .post('/login', login, (req, res) => {
+    console.log(req.body.username);
+    console.log(req.body.password);
+    console.log(req.session.user);
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
-    res.render('pages/index', {
-      results: searchResult.length,
-      searchTerm: req.searchTerm,
-      searchResult: searchResult,
-      category: req.category
-    });
+    res.redirect('/');
   })
+  .get('/logout', logout, (req, res) => res.redirect('/'))
   .get('/register', (req, res) => res.render('pages/register'))
   .get('/vertical-prototype', search, (req, res) => {
 
