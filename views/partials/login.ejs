@@ -1,0 +1,259 @@
+<style>
+body,h1 {font-family: "Montserrat", sans-serif}
+img {margin-bottom: -7px}
+.w3-row-padding img {margin-bottom: 12px}
+
+/* Middle */ 
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.header {
+    text-align: center;
+    padding: 32px;
+}
+
+.row {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+}
+
+.column img {
+    margin-top: 14px;
+    vertical-align: middle;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+    .column {
+        -ms-flex: 50%;
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        -ms-flex: 100%;
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+/* Sidebar */
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    padding-left: 370px;
+    color: #818181;
+    transition: 0.3s;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+#container {
+position: fixed;
+width: 340px;
+height: 220px;
+top: 19%;
+left: 95%;
+margin-top: -140px;
+margin-left: -170px;
+   
+font-family: "Helvetica Neue", Helvetica, sans-serif;   
+color: #444;   
+-webkit-font-smoothing: antialiased;    background: #f0f0f0;
+
+}
+input[type=textusr],
+input[type=password] {
+    color: #777;
+    padding-left: 10px;
+    margin: 10px;
+    margin-top: 12px;
+    margin-left: 18px;
+    width: 290px;
+    height: 29px;
+}
+
+//AA starting here---style-------
+//body {font-family: Arial, Helvetica, sans-serif;}
+//* {box-sizing: border-box}
+input[type=text2], input[type=password2] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+/* Add a background color when the inputs get focus */
+input[type=text2]:focus, input[type=password2]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Set a style for all buttons */
+.cancelbtn, .signupbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+button2:hover {
+    opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #474e5d;
+    padding-top: 50px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Style the horizontal ruler */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+ 
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+    }
+}
+//------end AA style--
+/* Search Bar */ 
+input[type=text] {
+    width: 530px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('../../images/searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 50px;
+    /*-webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;*/
+}
+
+/*input[type=text]:focus {
+    width: 100%;
+}*/
+
+</style>

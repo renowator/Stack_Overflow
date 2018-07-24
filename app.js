@@ -91,7 +91,8 @@ express()
       category: req.category
     });
   })
-  .post('/', register, login, search, (req, res) => {
+  .get('login', (req, res) => res.render('pages/login'))
+  .post('/login', login, search, (req, res) => {
     console.log(req.body.username)
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
@@ -103,6 +104,7 @@ express()
       category: req.category
     });
   })
+  .get('register', (req, res) => res.render('pages/register'))
   .get('/vertical-prototype', search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.
