@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const { Client } = require('pg');
+const bcrypt = require('bcrypt');
+const session = require('express-session')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -14,6 +16,17 @@ database.connect();
 
 //The number of search results
 var results = 0;
+
+//The user id
+var user = 0;
+
+function register(req, res, next) {
+  next();
+}
+
+function login(req, res, next) {
+  next();
+}
 
 // This function is an intermediate function that passes the results of a database query
 // to the renderer. Currently it checks if the category is valid, then runs a query depending
@@ -63,10 +76,23 @@ function search(req, res, next) {
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
+  .use(express.urlencoded())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', search, (req, res) => {
 
+    //It is here that we pass the results of the query to the renderer.
+    //The page will dynamically load data based on the results.
+    var searchResult = req.searchResult;
+    res.render('pages/index', {
+      results: searchResult.length,
+      searchTerm: req.searchTerm,
+      searchResult: searchResult,
+      category: req.category
+    });
+  })
+  .post('/', register, login, search, (req, res) => {
+    console.log(req.body.username)
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;

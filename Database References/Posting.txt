@@ -23,12 +23,13 @@ CREATE TYPE privilege AS ENUM ('guest', 'user', 'admin');
 CREATE TABLE Users (
     ID              int,
     Username        varchar(255),
+    email           varchar(255),
     Password	    varchar(255),
     Privilege	    privilege,
     Postings        int[]
 );
 
-INSERT INTO Users VALUES(0, 'guest', '', 'guest', ARRAY[]::int[]);
+INSERT INTO Users VALUES(0, 'guest', '', '', 'guest', ARRAY[]::int[]);
 
 SELECT * FROM Users;
 
