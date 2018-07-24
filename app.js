@@ -91,7 +91,7 @@ express()
       category: req.category
     });
   })
-  .get('login', (req, res) => res.render('pages/login'))
+  .get('/login', (req, res) => res.render('pages/login'))
   .post('/login', login, search, (req, res) => {
     console.log(req.body.username)
     //It is here that we pass the results of the query to the renderer.
@@ -104,7 +104,7 @@ express()
       category: req.category
     });
   })
-  .get('register', (req, res) => res.render('pages/register'))
+  .get('/register', (req, res) => res.render('pages/register'))
   .get('/vertical-prototype', search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.
