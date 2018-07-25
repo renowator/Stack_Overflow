@@ -1,7 +1,9 @@
 const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
-const { Client } = require('pg');
+const {
+  Client
+} = require('pg');
 const bcrypt = require('bcrypt');
 const session = require('express-session')
 
@@ -21,32 +23,68 @@ var results = 0;
 var user = 0;
 
 function register(req, res, next) {
+
+  bcrypt.hash(req.body.password, 10, function(err, hash) {
+    database.query('INSERT INTO Users VALUES(0, $1, $2, $3, $4, ARRAY[]::int[])', [req.body.username, req.body.email, hash, 'user'], (err, result) => {
+      if (err) {
+        console.log(err);
+        next();
+      }
+
+      login(req, res, next);
+    });
+  });
+
   next();
 }
 
 function login(req, res, next) {
-  if (!req.session.user) {
-    req.session.user = 'guest'
-  }
-  next();
+
+
+  database.query('SELECT Username, Password FROM Users WHERE Username = $1', [req.body.username], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.locals = {
+        user: 'guest'
+      };
+      next();
+    }
+
+    if (result.rows.length == 1) {
+      bcrypt.compare(req.body.password, String(result.rows[0].password), function(err, res) {
+        if (res) {
+          req.session.user = String(result.rows[0].username);
+          res.locals = {
+            user: req.session.user
+          };
+        }
+        next();
+      });
+    } else {
+      //TODO: Show error to user, no username exists
+      next();
+    }
+  });
 }
 
 function logout(req, res, next) {
   req.session.user = 'guest';
   res.locals = {
-     user: req.session.user
-   };
+    user: req.session.user
+  };
   next();
 }
 
 function validateUser(req, res, next) {
-    if (!req.session.user) {
-      req.session.user = 'John'
-    }
-    res.locals = {
-     user: req.session.user
-   };
-    next();
+  if (!req.session.user) {
+    req.session.user = 'guest'
+  }
+  console.log(req.session.user);
+  res.locals = {
+    user: req.session.user
+  };
+
+  next();
 }
 
 // This function is an intermediate function that passes the results of a database query
@@ -95,11 +133,11 @@ function search(req, res, next) {
 }
 
 express()
-  .use(session({  
-                  secret: 'csc648-stock-overflow',
-                  resave: false,
-                  saveUninitialized: true
-               }))
+  .use(session({
+    secret: 'csc648-stock-overflow',
+    resave: false,
+    saveUninitialized: true
+  }))
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
@@ -120,16 +158,13 @@ express()
   })
   .get('/login', (req, res) => res.render('pages/login'))
   .post('/login', login, (req, res) => {
-    console.log(req.body.username);
-    console.log(req.body.password);
-    console.log(req.session.user);
-    //It is here that we pass the results of the query to the renderer.
-    //The page will dynamically load data based on the results.
-    var searchResult = req.searchResult;
     res.redirect('/');
   })
   .get('/logout', logout, (req, res) => res.redirect('/'))
   .get('/register', (req, res) => res.render('pages/register'))
+  .post('/register', register, (req, res) => {
+    res.redirect('/');
+  })
   .get('/vertical-prototype', search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.
