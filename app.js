@@ -6,6 +6,7 @@ const {
 } = require('pg');
 const bcrypt = require('bcrypt');
 const session = require('express-session')
+const sharp = require('sharp')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -19,8 +20,12 @@ database.connect();
 //The number of search results
 var results = 0;
 
-//The user id
-var user = 0;
+function upload(req, res, next) {
+  console.log(req.body.file);
+  console.log(req.body.description);
+
+  next();
+}
 
 function register(req, res, next) {
 
@@ -32,10 +37,9 @@ function register(req, res, next) {
       }
 
       login(req, res, next);
+      next();
     });
   });
-
-  next();
 }
 
 function login(req, res, next) {
@@ -79,7 +83,6 @@ function validateUser(req, res, next) {
   if (!req.session.user) {
     req.session.user = 'guest'
   }
-  console.log(req.session.user);
   res.locals = {
     user: req.session.user
   };
@@ -178,6 +181,9 @@ express()
     });
   })
   .get('/upload', (req, res) => res.render('pages/upload'))
+  .post('/upload', upload, (req, res) => {
+    res.redirect('back');
+  })
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
