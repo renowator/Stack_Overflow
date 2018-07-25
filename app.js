@@ -154,7 +154,7 @@ function search(req, res, next) {
   var category = req.query.category;
 
   if (category === undefined || category === "") {
-    database.query('SELECT Image FROM Posting WHERE Name ~~* $1', ['%' + searchTerm + '%'], (err, result) => {
+    database.query('SELECT Image, ID FROM Posting WHERE Name ~~* $1', ['%' + searchTerm + '%'], (err, result) => {
       if (err) {
         req.searchResult = "";
         req.searchTerm = "";
@@ -164,21 +164,24 @@ function search(req, res, next) {
 
       //The results are parsed as JSON into the image column String that points to a file.
       req.searchResult = result.rows.map(x => String(x.image));
+      req.photoID = result.rows.map(x => String(x.id));
       req.searchTerm = searchTerm;
       req.category = "";
       next();
     });
   } else {
-    database.query('SELECT Image FROM Posting WHERE Category = $1 AND Name ~~* $2', [category, '%' + searchTerm + '%'], (err, result) => {
+    database.query('SELECT Image, ID FROM Posting WHERE Category = $1 AND Name ~~* $2', [category, '%' + searchTerm + '%'], (err, result) => {
       if (err) {
         req.searchResult = "";
         req.searchTerm = "";
         req.category = "";
+        console.log(err, "search second query")
         next();
       }
 
       if (result != undefined) {
         req.searchResult = result.rows.map(x => String(x.image));
+        req.photoID = result.rows.map(x => String(x.id));
       } else {
         req.searchResult = "";
       }
@@ -206,10 +209,12 @@ express()
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
+    if (!req.photoID) {req.photoID = 1}
     res.render('pages/index', {
       results: searchResult.length,
       searchTerm: req.searchTerm,
       searchResult: searchResult,
+      photoID: req.photoID,
       category: req.category
     });
   })
@@ -227,13 +232,16 @@ express()
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
+    if (!req.photoID) {req.photoID = 1}
     res.render('pages/vertical-prototype', {
       results: searchResult.length,
       searchTerm: req.searchTerm,
       searchResult: searchResult,
+      photoID: req.photoID,
       category: req.category
     });
   })
+  .get('/display/:id',(req, res) => res.render('pages/display'))
   .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {
     if (req.session.user == 'guest') {

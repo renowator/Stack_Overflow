@@ -9,7 +9,13 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
 		<script src="/jquery/jquery.js"></script>
-		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+		<script>
+		$( document ).ready(function() {
+		<% for (var i = 0; i < searchResult.length; i++) { %>
+		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
+		<% } %>
+		});
+		</script>
 	</head>
 	<body>
 		
@@ -19,11 +25,30 @@
 			<img class="background" src="/images/city.jpg">
 			<div class="centered">Your Ultimate Photo Destination</div>
 			<div class="search">
-				<input type="text" name="search" placeholder="Search..">
+				<form>
+					<select name ="category" onchange="this.form.submit()">
+						<option value="">All Categories</option>
+						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
+						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
+					</select>
+					<input type="text" name="search" placeholder="Search..">
+				</form>
 			</div>
 			<div class="vl"></div>
 			<a class="button button4" href="upload"> Upload </a>
 		</div>
+
+
+
+		<% if (searchTerm != undefined) { %>
+            <p><%= results %> of <%= results %> results displayed.</p>
+        <% } %>
+
+        <!-- Search Results -->
+        <div class="row">
+            <div class="column" id="result">
+            </div>
+        </div>
 		
 		<!-- Middle -->
 		<div class="row">
