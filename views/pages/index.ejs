@@ -1,211 +1,138 @@
 <!DOCTYPE html>
 <html>
-<title></title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="/jquery/jquery.js"></script>
-<style>
-body,h1 {font-family: "Montserrat", sans-serif}
-img {margin-bottom: -7px}
-.w3-row-padding img {margin-bottom: 12px}
+	<head>
+		<title>Stock Overflow</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+		<script src="/jquery/jquery.js"></script>
+		<script>
+		$( document ).ready(function() {
+		<% for (var i = 0; i < searchResult.length; i++) { %>
+		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
+		<% } %>
+		});
+		</script>
+	</head>
+	<body>
+		
+		<%- include ../partials/nav.ejs %>
+		
+		<div class="largeimage">
+			<img class="background" src="/images/city.jpg">
+			<div class="centered">Your Ultimate Photo Destination</div>
+			<div class="search">
+				<form>
+					<select name ="category" onchange="this.form.submit()">
+						<option value="">All Categories</option>
+						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
+						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
+					</select>
+					<input type="text" name="search" placeholder="Search..">
+					<input type="submit" value="Search!">
+				</form>
+			</div>
+		</div>
+		<div class="vl"><a class="button button4" href="upload"> Upload Photo </a></div>
 
-/* Middle */ 
 
-* {
-    box-sizing: border-box;
-}
 
-body {
-    margin: 0;
-    font-family: Arial;
-}
+		<% if (searchTerm != undefined) { %>
+            <p><%= results %> of <%= results %> results displayed.</p>
+            <p><%= message %></p>
+        <% } %>
 
-.header {
-    text-align: center;
-    padding: 32px;
-}
-
-.row {
-    display: -ms-flexbox; /* IE10 */
-    display: flex;
-    -ms-flex-wrap: wrap; /* IE10 */
-    flex-wrap: wrap;
-    padding: 0 4px;
-}
-
-/* Create four equal columns that sits next to each other */
-.column {
-    -ms-flex: 25%; /* IE10 */
-    flex: 25%;
-    max-width: 25%;
-    padding: 0 4px;
-}
-
-.column img {
-    margin-top: 14px;
-    vertical-align: middle;
-}
-
-/* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 800px) {
-    .column {
-        -ms-flex: 50%;
-        flex: 50%;
-        max-width: 50%;
-    }
-}
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-    .column {
-        -ms-flex: 100%;
-        flex: 100%;
-        max-width: 100%;
-    }
-}
-
-/* Sidebar */
-
-.sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    
-}
-
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-    text-align: center;
-}
-
-.sidenav a:hover {
-    color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    padding-left: 370px;
-    color: #818181;
-    transition: 0.3s;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-/* Search Bar */ 
-input[type=text] {
-    width: 530px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('../../images/searchicon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 50px;
-    /*-webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;*/
-}
-
-/*input[type=text]:focus {
-    width: 100%;
-}*/
-
-</style>
-<body>
-    
-<!-- Sidebar button -->
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-    
-<!-- Sidebar -->
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="#">Sign-Up</a>
-  <a href="#">Login</a>
-  <a href="/about">About</a>
-</div>
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
-
-<!-- Header -->
-    <div class="w3-opacity">
-        <div class="w3-clear"></div>
-        <header class="w3-center w3-margin-bottom">
-            <h1><b>STOCK OVERFLOW</b></h1>
-        </header>
-    </div>
-</div>
-
-<!-- Search Bar -->
-<form>
-  <input type="text" name="search" placeholder="Search..">
-</form>
-
-<!-- Middle -->
-<div class="row"> 
-    <div class="column">
-        <img src="/images/beach.jpg" style="width:100%">
-        <img src="/images/candy.jpg" style="width:100%">
-        <img src="/images/landscape2.jpg" style="width:100%">
-    </div>    
-    <div class="column">
-        <img src="/images/lion.jpg" style="width:100%">
-        <img src="/images/nature2.jpg" style="width:100%">
-        <img src="/images/cat.jpg" style="width:100%">
-    </div>
-    <div class="column">
-        <img src="/images/cityscape.jpg" style="width:100%">
-        <img src="/images/ocean.jpg" style="width:100%">
-        <img src="/images/hamburger.jpg" style="width:100%">
-    </div>
-    <div class="column">
-        <img src="/images/festival.jpg" style="width:100%">
-        <img src="/images/nebula.jpg" style="width:100%">
-        <img src="/images/cafe.jpg" style="width:100%">
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-light-grey w3-center w3-opacity w3-xlarge" style="margin-top:128px"> 
-  <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  <i class="fa fa-instagram w3-hover-opacity"></i>
-  <i class="fa fa-snapchat w3-hover-opacity"></i>
-  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-  <i class="fa fa-twitter w3-hover-opacity"></i>
-  <i class="fa fa-linkedin w3-hover-opacity"></i>
-</footer>
-    
-<script>
-// Open and close sidebar
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "500px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-</script>
-
-</body>
+        <!-- Search Results -->
+        <div class="row">
+            <div class="column" id="result">
+            </div>
+        </div>
+		
+		<!-- Middle -->
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img  src="/images/beach.jpg" style="width:100%">
+					<div class="after"> Beaches </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/candy.jpg" style="width:100%">
+					<div class="after"> Candy </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/landscape2.jpg" style="width:100%">
+					<div class="after"> Landscapes </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/lion.jpg" style="width:100%">
+					<div class="after"> Animals </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img src="/images/nature2.jpg" style="width:100%">
+					<div class="after"> Nature </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cat.jpg" style="width:100%">
+					<div class="after"> Cats </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cityscape.jpg" style="width:100%">
+					<div class="after"> Cityscapes </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/ocean.jpg" style="width:100%">
+					<div class="after"> Oceans </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img src="/images/hamburger.jpg" style="width:100%">
+					<div class="after"> Statues </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/festival.jpg" style="width:100%">
+					<div class="after"> Festivals </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/nebula.jpg" style="width:100%">
+					<div class="after"> Space </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cafe.jpg" style="width:100%">
+					<div class="after"> Cafes </div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Footer -->
+		<div class="footer"></div>
+		
+	</body>
 </html>
