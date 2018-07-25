@@ -1,66 +1,138 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <% include ../partials/header.ejs %>
-</head>
-
-<body>
-
-  <% include ../partials/nav.ejs %>
-
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Node on Heroku</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started with Node</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
-
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/node-js-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd node-js-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div>
+	<head>
+		<title>Stock Overflow</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+		<script src="/jquery/jquery.js"></script>
+		<script>
+		$( document ).ready(function() {
+		<% for (var i = 0; i < searchResult.length; i++) { %>
+		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
+		<% } %>
+		});
+		</script>
+	</head>
+	<body>
+		
+		<%- include ../partials/nav.ejs %>
+		
+		<div class="largeimage">
+			<img class="background" src="/images/city.jpg">
+			<div class="centered">Your Ultimate Photo Destination</div>
+			<div class="search">
+				<form>
+					<select name ="category" onchange="this.form.submit()">
+						<option value="">All Categories</option>
+						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
+						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
+					</select>
+					<input type="text" name="search" placeholder="Search..">
+					<input type="submit" value="Search!">
+				</form>
+			</div>
+		</div>
+		<div class="vl"><a class="button button4" href="upload"> Upload Photo </a></div>
 
 
-</body>
+
+		<% if (searchTerm != undefined) { %>
+            <p><%= results %> of <%= results %> results displayed.</p>
+            <p><%= message %></p>
+        <% } %>
+
+        <!-- Search Results -->
+        <div class="row">
+            <div class="column" id="result">
+            </div>
+        </div>
+		
+		<!-- Middle -->
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img  src="/images/beach.jpg" style="width:100%">
+					<div class="after"> Beaches </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/candy.jpg" style="width:100%">
+					<div class="after"> Candy </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/landscape2.jpg" style="width:100%">
+					<div class="after"> Landscapes </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/lion.jpg" style="width:100%">
+					<div class="after"> Animals </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img src="/images/nature2.jpg" style="width:100%">
+					<div class="after"> Nature </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cat.jpg" style="width:100%">
+					<div class="after"> Cats </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cityscape.jpg" style="width:100%">
+					<div class="after"> Cityscapes </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/ocean.jpg" style="width:100%">
+					<div class="after"> Oceans </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column">
+				<div class="container">
+					<img src="/images/hamburger.jpg" style="width:100%">
+					<div class="after"> Statues </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/festival.jpg" style="width:100%">
+					<div class="after"> Festivals </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/nebula.jpg" style="width:100%">
+					<div class="after"> Space </div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="container">
+					<img src="/images/cafe.jpg" style="width:100%">
+					<div class="after"> Cafes </div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Footer -->
+		<div class="footer"></div>
+		
+	</body>
 </html>

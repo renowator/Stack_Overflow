@@ -3,16 +3,25 @@
   "version": "0.3.0",
   "description": "A sample Node.js app using Express 4",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.9.1",
+    "npm": "5.7.1"
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "node test.js"
   },
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "ejs": "^2.5.6",
-    "express": "^4.15.2"
+    "ejs-lint": "^0.3.0",
+    "express": "^4.15.2",
+    "express-session": "^1.15.6",
+    "formidable": "^1.2.1",
+    "jquery": "^3.3.1",
+    "pg": "^7.4.3",
+    "pg-promise": "^8.4.5",
+    "sharp": "^0.20.5"
   },
   "devDependencies": {
     "request": "^2.81.0",
