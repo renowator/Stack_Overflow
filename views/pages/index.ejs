@@ -32,16 +32,17 @@
 						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
 					</select>
 					<input type="text" name="search" placeholder="Search..">
+					<input type="submit" value="Search!">
 				</form>
 			</div>
-			<div class="vl"></div>
-			<a class="button button4" href="upload"> Upload </a>
 		</div>
+		<div class="vl"><a class="button button4" href="upload"> Upload Photo </a></div>
 
 
 
 		<% if (searchTerm != undefined) { %>
             <p><%= results %> of <%= results %> results displayed.</p>
+            <p><%= message %></p>
         <% } %>
 
         <!-- Search Results -->

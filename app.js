@@ -24,6 +24,19 @@ var results = 0;
 const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
 const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
+function display(req, res, next) {
+  database.query('SELECT Image, Name FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
+    if (err) {
+      console.log(err);
+      next();
+    }
+
+    req.imageName = String(result.rows[0].image)
+    req.imageDescription = String(result.rows[0].name)
+    next();
+    
+  });
+}
 
 function upload(req, res, next) {
   if (req.session.user === 'guest') {
@@ -144,10 +157,46 @@ function validateUser(req, res, next) {
   next();
 }
 
+function validate(req, res, next) {
+  req.hasSearched = true
+  req.isValid = false;
+  req.message = "";
+  var searchTerm = req.query.search;
+  if (searchTerm == undefined) {
+    searchTerm = "";
+    req.hasSearched = false;
+  }
+
+  if (searchTerm.length > 50) {
+    req.message = "Search term must be no more than 50 characters long. Please search again with a shorter query.";
+    req.isValid = false;
+    next();
+  }
+
+  var pattern = /^[0-9a-zA-Z\s]*$/;
+  if (!searchTerm.match(pattern)) {
+    req.message = "Search term must contain only alphanumeric characters or spaces. Please search again with a valid query.";
+    req.isValid = false;
+    next();
+  }
+
+  req.isValid = true;
+  next();
+}
+
 // This function is an intermediate function that passes the results of a database query
 // to the renderer. Currently it checks if the category is valid, then runs a query depending
 // on the result. In the future, we plan on handling the errors in a better way than ignoring them.
 function search(req, res, next) {
+
+  if (!req.isValid) {
+    req.searchResult = "";
+    req.searchTerm = "";
+    req.category = "";
+    next();
+  }
+
+
   //The user's search term
   var searchTerm = req.query.search;
   //The user's selected category
@@ -204,18 +253,24 @@ express()
   .use(express.urlencoded())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', search, (req, res) => {
+  .get('/', validate, search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
-    if (!req.photoID) {req.photoID = 1}
+    if (!req.photoID) {
+      req.photoID = 1
+    }
+    if (!req.hasSearched) {
+      req.searchTerm = undefined;
+    }
     res.render('pages/index', {
       results: searchResult.length,
       searchTerm: req.searchTerm,
       searchResult: searchResult,
       photoID: req.photoID,
-      category: req.category
+      category: req.category,
+      message: req.message
     });
   })
   .get('/login', (req, res) => res.render('pages/login'))
@@ -232,7 +287,9 @@ express()
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
-    if (!req.photoID) {req.photoID = 1}
+    if (!req.photoID) {
+      req.photoID = 1
+    }
     res.render('pages/vertical-prototype', {
       results: searchResult.length,
       searchTerm: req.searchTerm,
@@ -241,7 +298,12 @@ express()
       category: req.category
     });
   })
-  .get('/display/:id',(req, res) => res.render('pages/display'))
+  .get('/display/:id', display, (req, res) => {
+    res.render('pages/display', {
+      fileName: req.imageName,
+      description: req.imageDescription
+    });
+  })
   .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {
     if (req.session.user == 'guest') {
@@ -251,6 +313,7 @@ express()
     }
   })
   .get('/about', (req, res) => res.render('pages/about'))
+  .get('/admin', (req, res) => res.render('pages/admin'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
   .get('/about/AndrewAndrawo', (req, res) => res.render('pages/aboutAndrew'))
