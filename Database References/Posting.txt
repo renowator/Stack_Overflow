@@ -2,7 +2,7 @@ DROP TABLE Posting;
 DROP TABLE Users;
 
 CREATE TABLE Posting (
-    ID              int,
+    ID              SERIAL PRIMARY KEY,
     Name            varchar(255),
     Category        category,
     Status          status,
@@ -10,18 +10,18 @@ CREATE TABLE Posting (
     Image           varchar(255)
 );
 
-INSERT INTO Posting VALUES(1, 'Tree leaves', 'Nature', 'Approved', 42, 'Tree.jpg');
-INSERT INTO Posting VALUES(2, 'Lightning above city', 'Nature', 'Approved', 42, 'Lightning.jpg');
-INSERT INTO Posting VALUES(3, 'Bear waving', 'Animals', 'Approved', 42, 'Bear.jpg');
-INSERT INTO Posting VALUES(4, 'Giraffes', 'Animals', 'Approved', 42, 'Giraffes.jpg');
-INSERT INTO Posting VALUES(5, 'Birds with Moon', 'Animals', 'Approved', 42, 'Birds.jpg');
+INSERT INTO Posting VALUES(DEFAULT, 'Tree leaves', 'Nature', 'Approved', 1, 'Tree.jpg');
+INSERT INTO Posting VALUES(DEFAULT, 'Lightning above city', 'Nature', 'Approved', 1, 'Lightning.jpg');
+INSERT INTO Posting VALUES(DEFAULT, 'Bear waving', 'Animals', 'Approved', 1, 'Bear.jpg');
+INSERT INTO Posting VALUES(DEFAULT, 'Giraffes', 'Animals', 'Approved', 1, 'Giraffes.jpg');
+INSERT INTO Posting VALUES(DEFAULT, 'Birds with Moon', 'Animals', 'Approved', 1, 'Birds.jpg');
 
 SELECT * FROM Posting;
 
 CREATE TYPE privilege AS ENUM ('guest', 'user', 'admin');
 
 CREATE TABLE Users (
-    ID              int,
+    ID              SERIAL PRIMARY KEY,
     Username        varchar(255),
     Email           varchar(255),
     Password	    varchar(255),
@@ -29,8 +29,7 @@ CREATE TABLE Users (
     Postings        int[]
 );
 
-INSERT INTO Users VALUES(0, 'guest', '', '', 'guest', ARRAY[]::int[]);
-INSERT INTO Users VALUES(0, 'Scott', 'scottpennd@gmail.com', 'bubba', 'user', ARRAY[]::int[]);
+INSERT INTO Users VALUES(DEFAULT, 'guest', '', '', 'guest', ARRAY[]::int[]);
 
 SELECT * FROM Users;
 

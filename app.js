@@ -6,6 +6,7 @@ const {
 } = require('pg');
 const bcrypt = require('bcrypt');
 const session = require('express-session')
+const formidable = require('formidable')
 const sharp = require('sharp')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
@@ -20,17 +21,69 @@ database.connect();
 //The number of search results
 var results = 0;
 
-function upload(req, res, next) {
-  console.log(req.body.file);
-  console.log(req.body.description);
+const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
+const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
-  next();
+
+function upload(req, res, next) {
+  if (req.session.user === 'guest') {
+    console.log(`I'm a guest`);
+    next();
+  } else {
+
+    database.query('SELECT ID FROM Users WHERE Username = $1', [req.session.user], (err, result) => {
+      if (err) {
+        console.log(err);
+        next();
+      }
+      var id = String(result.rows[0].id);
+      var timestamp = 0;
+      var extension = '.jpg'
+      var form = new formidable.IncomingForm()
+      form.multiples = true
+      form.keepExtensions = true
+      form.uploadDir = photoDirectory
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          console.log(err);
+          next();
+        }
+        sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
+          .resize(100, 100)
+          .toFile(path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`), (err, info) => {
+            if (err) {
+              console.log(err);
+              next();
+            }
+            console.log(info);
+            database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5)', ['test', 'Nature', 'Pending', id, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
+              if (err) {
+                console.log(err);
+                next();
+              }
+
+              next();
+            });
+          });
+        console.log('upload succeeded');
+      })
+      form.on('fileBegin', function(name, file) {
+        const [fileName, fileExt] = file.name.split('.')
+        timestamp = new Date().getTime();
+        extension = fileExt;
+        file.path = path.join(photoDirectory, `${req.session.user}_${timestamp}.${fileExt}`);
+      });
+
+    });
+
+  }
+
 }
 
 function register(req, res, next) {
 
   bcrypt.hash(req.body.password, 10, function(err, hash) {
-    database.query('INSERT INTO Users VALUES(0, $1, $2, $3, $4, ARRAY[]::int[])', [req.body.username, req.body.email, hash, 'user'], (err, result) => {
+    database.query('INSERT INTO Users VALUES(DEFAULT, $1, $2, $3, $4, ARRAY[]::int[])', [req.body.username, req.body.email, hash, 'user'], (err, result) => {
       if (err) {
         console.log(err);
         next();
@@ -182,7 +235,11 @@ express()
   })
   .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {
-    res.redirect('back');
+    if (req.session.user == 'guest') {
+      res.redirect('/login');
+    } else {
+      res.redirect('back');
+    }
   })
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
