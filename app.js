@@ -30,50 +30,45 @@ function upload(req, res, next) {
     console.log(`I'm a guest`);
     next();
   } else {
-
-    database.query('SELECT ID FROM Users WHERE Username = $1', [req.session.user], (err, result) => {
+    var timestamp = 0; //defaults
+    var extension = '.jpg' //defaults
+    var description = 'No description given'
+    var form = new formidable.IncomingForm()
+    form.multiples = true
+    form.keepExtensions = true
+    form.uploadDir = photoDirectory
+    form.parse(req, (err, fields, files) => {
       if (err) {
         console.log(err);
         next();
       }
-      var id = String(result.rows[0].id);
-      var timestamp = 0;
-      var extension = '.jpg'
-      var form = new formidable.IncomingForm()
-      form.multiples = true
-      form.keepExtensions = true
-      form.uploadDir = photoDirectory
-      form.parse(req, (err, fields, files) => {
-        if (err) {
-          console.log(err);
-          next();
-        }
-        sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
-          .resize(100, 100)
-          .toFile(path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`), (err, info) => {
+      sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
+        .resize(100, 100)
+        .toFile(path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`), (err, info) => {
+          if (err) {
+            console.log(err);
+            next();
+          }
+          console.log(info);
+          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5)', [description, 'Nature', 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
             if (err) {
               console.log(err);
               next();
             }
-            console.log(info);
-            database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5)', ['test', 'Nature', 'Pending', id, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
-              if (err) {
-                console.log(err);
-                next();
-              }
 
-              next();
-            });
+            next();
           });
-        console.log('upload succeeded');
-      })
-      form.on('fileBegin', function(name, file) {
-        const [fileName, fileExt] = file.name.split('.')
-        timestamp = new Date().getTime();
-        extension = fileExt;
-        file.path = path.join(photoDirectory, `${req.session.user}_${timestamp}.${fileExt}`);
-      });
-
+        });
+      console.log('upload succeeded');
+    })
+    form.on('field', function(name, value) {
+      description = value
+    });
+    form.on('fileBegin', function(name, file) {
+      const [fileName, fileExt] = file.name.split('.')
+      timestamp = new Date().getTime();
+      extension = fileExt;
+      file.path = path.join(photoDirectory, `${req.session.user}_${timestamp}.${fileExt}`);
     });
 
   }
@@ -90,7 +85,6 @@ function register(req, res, next) {
       }
 
       login(req, res, next);
-      next();
     });
   });
 }
@@ -98,11 +92,12 @@ function register(req, res, next) {
 function login(req, res, next) {
 
 
-  database.query('SELECT Username, Password FROM Users WHERE Username = $1', [req.body.username], (err, result) => {
+  database.query('SELECT ID, Username, Password FROM Users WHERE Username = $1', [req.body.username], (err, result) => {
     if (err) {
       console.log(err);
       res.locals = {
-        user: 'guest'
+        user: 'guest',
+        id: 1
       };
       next();
     }
@@ -111,8 +106,10 @@ function login(req, res, next) {
       bcrypt.compare(req.body.password, String(result.rows[0].password), function(err, res) {
         if (res) {
           req.session.user = String(result.rows[0].username);
+          req.session.userid = String(result.rows[0].id);
           res.locals = {
-            user: req.session.user
+            user: req.session.user,
+            id: req.session.userid
           };
         }
         next();
@@ -126,8 +123,10 @@ function login(req, res, next) {
 
 function logout(req, res, next) {
   req.session.user = 'guest';
+  req.session.userid = 1;
   res.locals = {
-    user: req.session.user
+    user: req.session.user,
+    id: req.session.userid
   };
   next();
 }
@@ -135,9 +134,11 @@ function logout(req, res, next) {
 function validateUser(req, res, next) {
   if (!req.session.user) {
     req.session.user = 'guest'
+    req.session.userid = 1
   }
   res.locals = {
-    user: req.session.user
+    user: req.session.user,
+    id: req.session.userid
   };
 
   next();

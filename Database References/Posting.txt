@@ -1,5 +1,11 @@
 DROP TABLE Posting;
 DROP TABLE Users;
+DROP TYPE category;
+DROP TYPE status;
+DROP TYPE privilege;
+
+CREATE TYPE category AS ENUM ('Nature', 'Animals');
+CREATE TYPE status AS ENUM ('Pending', 'Approved', 'Rejected');
 
 CREATE TABLE Posting (
     ID              SERIAL PRIMARY KEY,
@@ -9,12 +15,6 @@ CREATE TABLE Posting (
     UserID          int,
     Image           varchar(255)
 );
-
-INSERT INTO Posting VALUES(DEFAULT, 'Tree leaves', 'Nature', 'Approved', 1, 'Tree.jpg');
-INSERT INTO Posting VALUES(DEFAULT, 'Lightning above city', 'Nature', 'Approved', 1, 'Lightning.jpg');
-INSERT INTO Posting VALUES(DEFAULT, 'Bear waving', 'Animals', 'Approved', 1, 'Bear.jpg');
-INSERT INTO Posting VALUES(DEFAULT, 'Giraffes', 'Animals', 'Approved', 1, 'Giraffes.jpg');
-INSERT INTO Posting VALUES(DEFAULT, 'Birds with Moon', 'Animals', 'Approved', 1, 'Birds.jpg');
 
 SELECT * FROM Posting;
 

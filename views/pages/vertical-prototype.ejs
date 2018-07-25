@@ -6,28 +6,20 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
     <script src="/jquery/jquery.js"></script>
     <% include ../partials/style.ejs %>
     <!-- Function to show search results -->
     <script>
     $( document ).ready(function() {
     <% for (var i = 0; i < searchResult.length; i++) { %>
-    document.getElementById('result').innerHTML += `<img src="/images/StockPhotos/<%= searchResult[i] %>" style="width:100%"><br>`;
+    document.getElementById('result').innerHTML += `<img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"><br>`;
     <% } %>
     });
     </script>
     <body>
+        <%- include ../partials/nav.ejs %>
         
-        <!-- Sidebar button -->
-        <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776;</span>
-        
-        <!-- Sidebar -->
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">&times;</a>
-            <a href="#">Sign-Up</a>
-            <a href="#">Login</a>
-            <a href="/about">About</a>
-        </div>
         <!-- !PAGE CONTENT! -->
         <div class="w3-content" style="max-width:1500px">
             <!-- Header -->
