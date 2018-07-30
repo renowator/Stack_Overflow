@@ -26,42 +26,55 @@ img {margin-bottom: -7px}
     color: black;
 }
 
+.topnav .upload {
+    background-color: #DF3A01;
+    color: black;
+}
+.topnav .upload:hover {
+    background-color: #8C001A;
+    color: white;
+}
+
 .topnav .signup {
     background-color: #36b036;
+    color:black;
 }
 
 /* Change color on hover */
 .topnav .signup:hover {
     background-color: #3e8e41;
+    color:white;
 }
 
-.largeimage {
+#largeimage {
     background-size:cover;
 	background-position:center;
 	background-repeat:no-repeat;
     position: relative;
     text-align: center;
+    max-width: 1500px;
 }
 
 .background {
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: space;
     background-size: cover;
     width: 100%;
 }
 
-.centered {
+#centered {
     position: absolute;
-    top: 30%;
-    left: 50%;
+    top: 35%;
+    left: 60%;
     transform: translate(-50%, -50%);
     color:white;
-    font-size: 300%;
+    font-size: 250%;
     font-weight: bold;
 }
 
-.search {
+#search {
     position: absolute;
+    align-content: center;
     top: 50%;
     left: 40%;
     transform: translate(-50%, -50%);

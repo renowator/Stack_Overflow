@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<script src="/jquery/jquery.js"></script>
 		<script>
 		$( document ).ready(function() {
@@ -21,36 +22,52 @@
 		
 		<%- include ../partials/nav.ejs %>
 		
-		<div class="largeimage">
+		<div class="container-fluid" id="largeimage">
 			<img class="background" src="/images/city.jpg" >
-			<div class="centered">Your Ultimate Photo Destination</div>
-			<div class="search">
+			
+			<div class ="container" id="centered">
+                <div class="row"><br></div>
+                <div class="row" ><div class="column"><br></div>Your Ultimate <br>Photo Destination</div>
+                <div class="row" >
+                    <div class="column">
+            <div class="input-group">
+  
 				<form>
-					<select name ="category" onchange="this.form.submit()">
+                    <div class="input-group-prepend" >
+					<select class="input-group-text" name ="category" onchange="this.form.submit()" id="select">
 						<option value="">All Categories</option>
 						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
 						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
 					</select>
-					<input type="text" name="search" placeholder="Search..">
-					<input type="submit" class="button button4" value="Search!">
+                      </div>  
+					<input type="text" class="form-control" name="search" placeholder="Search..">
+                    <!--
+                    <br>
+                    <div class="input-group-append">
+					<input type="submit" align="center" class="input-group-text" value="Search!">
+                    </div>-->
 				</form>
-			</div>
-		</div>
+			           </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 		
 
-
+<div class="container">
 <div class="row">
+    <div class="column"><br></div><div class="column"><br></div>
 		<% if (searchTerm != undefined) { %>
             <p><%= results %> of <%= results %> results displayed.</p>
             <p><%= message %></p>
         <% } %>
-
-        <!-- Search Results -->
-        <div class="column">
-            <div class="row" id="result">
-            </div>
     </div>
-</div>
+        <!-- Search Results -->
+        
+            <div class="row" id="result"><br>
+            </div>
+   
+    </div>
 		<br>
 		<!-- Middle -->
 		<div class="row">
@@ -130,7 +147,7 @@
 					<div class="after"> Cafes </div>
 				</div>
 			</div>
-		</div>
+    </div></div>
 		
 		<!-- Footer -->
 		<div class="footer"></div>
