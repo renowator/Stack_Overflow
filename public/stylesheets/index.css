@@ -36,6 +36,9 @@ img {margin-bottom: -7px}
 }
 
 .largeimage {
+    background-size:cover;
+	background-position:center;
+	background-repeat:no-repeat;
     position: relative;
     text-align: center;
 }
@@ -102,7 +105,7 @@ input[type=text] {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 4px 300px;
     cursor: pointer;
 }
 
@@ -128,7 +131,7 @@ body {
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    padding: 0 4px;
+    padding: 2px 4px;
 }
 
 /* Create four equal columns that sits next to each other */
@@ -136,7 +139,7 @@ body {
     -ms-flex: 25%; /* IE10 */
     flex: 25%;
     max-width: 25%;
-    padding: 0 4px;
+    padding: 2px 4px;
 }
 
 .column img {

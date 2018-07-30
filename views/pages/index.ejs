@@ -22,7 +22,7 @@
 		<%- include ../partials/nav.ejs %>
 		
 		<div class="largeimage">
-			<img class="background" src="/images/city.jpg">
+			<img class="background" src="/images/city.jpg" >
 			<div class="centered">Your Ultimate Photo Destination</div>
 			<div class="search">
 				<form>
@@ -32,25 +32,26 @@
 						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
 					</select>
 					<input type="text" name="search" placeholder="Search..">
-					<input type="submit" value="Search!">
+					<input type="submit" class="button button4" value="Search!">
 				</form>
 			</div>
 		</div>
-		<div class="vl"><a class="button button4" href="upload"> Upload Photo </a></div>
+		
 
 
-
+<div class="row">
 		<% if (searchTerm != undefined) { %>
             <p><%= results %> of <%= results %> results displayed.</p>
             <p><%= message %></p>
         <% } %>
 
         <!-- Search Results -->
-        <div class="row">
-            <div class="column" id="result">
+        <div class="column">
+            <div class="row" id="result">
             </div>
-        </div>
-		
+    </div>
+</div>
+		<br>
 		<!-- Middle -->
 		<div class="row">
 			<div class="column">
