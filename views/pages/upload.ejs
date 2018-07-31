@@ -2,6 +2,7 @@
 <!-- Template by quackit.com -->
 <html>
 	<head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title> Upload Page</title>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
@@ -55,17 +56,11 @@
 			#content {
 				margin-right: 230px; /* Same as 'nav' width */
 			}
-		
-		#description
-		{
-		
-		width = 800px;
-		font-size:14pt;
-		}
+
 			
 			.innertube {
 		text-align: center;
-				margin: 15px; /* Padding for content */
+				margin: 5px; /* Padding for content */
 				margin-top: 0;
 			}
 		
@@ -107,19 +102,56 @@
 	<body>
 		<% include ../partials/nav.ejs %>
 		
-		<div id="wrapper">
+		<div class="container" id="wrapper">
 			
 			<main>
-				<div id="content">
+				<div class="col-lg" id="content">
 					<div class="innertube">
-						<h1>Please choose an image and add a description to upload</h1>
+						<h1>Please fill in all fields marked with (*) and select image to upload</h1>
 					</div>
+                    
 					<form enctype="multipart/form-data" method="post">
-						<input type='file' onchange="readURL(this);" name="file" required/>
-						<img id="blah" src="#" alt="your image" /><br><br>
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-4">
+                                <div class="form-group">
+                                <label for="sel3">Select category(*)</label>
+                                <select class="form-control input-sm" id="sel3" required>
+                                <option value="" disabled>None</option>
+                                <option value="Nature">Nature</option>
+                                <option value="Animals">Animals</option>
+                                </select>
+                                </div>
+                            </div>
+                        <br>
+                        </div>
+                         <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-4">
+                            <div class="form-group">
+                                <label for="imgname">Image name(*):</label>
+                                    <input class="form-control input-lg" id="imgname" type="text" required>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
 						Description:<br>
-						<textarea name="description" style="width:250px;height:150px;" required></textarea><br>
-						<button type="submit">Upload</button>
+                            <textarea name="description" style="width:250px;height:150px;"></textarea><br>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-1 col-md-3 col-lg-8">
+                           
+						<input type='file' onchange="readURL(this);" name="file" required/>
+                            
+                            <img id="blah" src="#" alt="your image" /><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-4 col-sm-offset-6">
+						<button type="submit" class="btn btn-warning btn-lg">Upload Photo</button>
+                        </div>
+                        </div>
 					</form>
 					<br>
 					<p>Please note that once the upload is complete we will need to review the content and it would not be visible on the website automatically. If your content is rejected, we will notify you via email. Thank you for your understanding!</p>
@@ -127,16 +159,20 @@
 			</main>
 			
 			<nav>
-				<div class="innertube">
+          
+                    <div class="span1 sidebar">
+                   
 					<h3>Our Sponsors</h3>
-					<ul>
-						<li><a href="#">Your ad can be here</a></li>
-						<li><a href="#">Your ad can be here</a></li>
-						<li><a href="#">Your ad can be here</a></li>
-						<li><a href="#">Your ad can be here</a></li>
+					<ul class="nav nav-tabs nav-stacked">
+						<li><a href="#">Your ad can be here</a></li><br>
+						<li><a href="#">Your ad can be here</a></li><br>
+						<li><a href="#">Your ad can be here</a></li><br>
+						<li><a href="#">Your ad can be here</a></li><br>
 						<li><a href="#">Your ad can be here</a></li>
 					</ul>
-				</div>
+                 
+                    </div>
+              
 			</nav>
 			
 		</div>

@@ -81,8 +81,9 @@ img {margin-bottom: -7px}
 }
 
 /* Search Bar */ 
-input[type=text] {
-    width: 730px;
+/*input[type=text] */
+#mainsearchbar{
+    width:730px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
