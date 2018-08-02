@@ -69,13 +69,20 @@ function upload(req, res, next) {
             next();
           }
           console.log(info);
-          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5, $6)', [imageName, imageDescription, imageCategory, 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
+          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING ID;', [imageName, imageDescription, imageCategory, 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
             if (err) {
               console.log(err);
               next();
             }
+            console.log(result);
+            database.query('UPDATE Users SET Postings = Postings || $1 WHERE ID = $2', [`{${result.rows[0].id}}`, req.session.userid], (err, result) => {
+              if (err) {
+                console.log(err);
+                next();
+              }
 
-            next();
+              next();
+            });
           });
         });
       console.log('upload succeeded');
@@ -270,7 +277,7 @@ express()
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
-  .use(express.urlencoded())
+  .use(express.urlencoded({ extended: false }))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', validateSearch, search, (req, res) => {
