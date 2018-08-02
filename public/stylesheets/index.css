@@ -21,6 +21,12 @@ img {margin-bottom: -7px}
 }
 
 /* Change color on hover */
+.topnav .sitename:hover {
+    background-color: #444;
+    color: white;
+    text-decoration: none;
+    
+}
 .topnav .login:hover {
     background-color: #ddd;
     color: black;
