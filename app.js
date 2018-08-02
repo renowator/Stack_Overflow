@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
+const download = require('download-file')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -41,6 +42,12 @@ function display(req, res, next) {
 
   });
 }
+
+// function downloadPhoto(req, res, next) {
+//   var photo = path.join(photoDirectory, req.body.fileName);
+//   res.download(photo);
+//   next();
+// }
 
 function upload(req, res, next) {
   if (req.session.user === 'guest') {
@@ -277,7 +284,9 @@ express()
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
-  .use(express.urlencoded({ extended: false }))
+  .use(express.urlencoded({
+    extended: false
+  }))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', validateSearch, search, (req, res) => {
@@ -316,6 +325,11 @@ express()
       description: req.imageDescription,
       category: req.imageCategory
     });
+  })
+  .post('/display/:id', (req, res) => {
+    var photo = path.join(photoDirectory, req.body.fileName);
+    var extension = photo.split('.').pop()
+    res.download(photo, `StockOverflow-${req.params.id}.${extension}`);
   })
   .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {

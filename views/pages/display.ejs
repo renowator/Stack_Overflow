@@ -100,7 +100,9 @@
 					<p>Description: <%= description %></p><br>
 					<p>Category: <%= category %></p><br>
 					<p> <%= name %> </p><br>
-					<button type="submit">Download</button>
+					<form method="POST">
+						<button name="fileName" value="<%= fileName %>">Download</button>
+					</form>
 					<br>
 					<p>Please note that by downloading you agree to not sue us please. There are no refunds for any of our photos.</p></div>
 				</main>
