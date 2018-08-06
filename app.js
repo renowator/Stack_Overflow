@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
+const download = require('download-file')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -25,18 +26,28 @@ const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
 const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
 function display(req, res, next) {
-  database.query('SELECT Image, Name FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
+  database.query('SELECT * FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
     if (err) {
       console.log(err);
       next();
     }
 
-    req.imageName = String(result.rows[0].image)
-    req.imageDescription = String(result.rows[0].name)
+    req.image = String(result.rows[0].image)
+    req.imageName = String(result.rows[0].name)
+    req.imageDescription = String(result.rows[0].description)
+    req.imageCategory = String(result.rows[0].category)
+
+    //TODO get image uploader.
     next();
-    
+
   });
 }
+
+// function downloadPhoto(req, res, next) {
+//   var photo = path.join(photoDirectory, req.body.fileName);
+//   res.download(photo);
+//   next();
+// }
 
 function upload(req, res, next) {
   if (req.session.user === 'guest') {
@@ -45,7 +56,9 @@ function upload(req, res, next) {
   } else {
     var timestamp = 0; //defaults
     var extension = '.jpg' //defaults
-    var description = 'No description given'
+    var imageName = ''
+    var imageDescription = 'No description given'
+    var imageCategory = 'None'
     var form = new formidable.IncomingForm()
     form.multiples = true
     form.keepExtensions = true
@@ -63,19 +76,40 @@ function upload(req, res, next) {
             next();
           }
           console.log(info);
-          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5)', [description, 'Nature', 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
+          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING ID;', [imageName, imageDescription, imageCategory, 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
             if (err) {
               console.log(err);
               next();
             }
+            console.log(result);
+            database.query('UPDATE Users SET Postings = Postings || $1 WHERE ID = $2', [`{${result.rows[0].id}}`, req.session.userid], (err, result) => {
+              if (err) {
+                console.log(err);
+                next();
+              }
 
-            next();
+              next();
+            });
           });
         });
       console.log('upload succeeded');
     })
     form.on('field', function(name, value) {
-      description = value
+      switch (name) {
+        case "imageName":
+          imageName = value;
+          break;
+        case "imageDescription":
+          if (value != "") {
+            imageDescription = value;
+          }
+          break;
+        case "category":
+          imageCategory = value;
+          break;
+        default:
+          break;
+      }
     });
     form.on('fileBegin', function(name, file) {
       const [fileName, fileExt] = file.name.split('.')
@@ -157,7 +191,7 @@ function validateUser(req, res, next) {
   next();
 }
 
-function validate(req, res, next) {
+function validateSearch(req, res, next) {
   req.hasSearched = true
   req.isValid = false;
   req.message = "";
@@ -250,10 +284,12 @@ express()
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
-  .use(express.urlencoded())
+  .use(express.urlencoded({
+    extended: false
+  }))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', validate, search, (req, res) => {
+  .get('/', validateSearch, search, (req, res) => {
 
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
@@ -282,34 +318,25 @@ express()
   .post('/register', register, (req, res) => {
     res.redirect('/');
   })
-  .get('/vertical-prototype', search, (req, res) => {
-
-    //It is here that we pass the results of the query to the renderer.
-    //The page will dynamically load data based on the results.
-    var searchResult = req.searchResult;
-    if (!req.photoID) {
-      req.photoID = 1
-    }
-    res.render('pages/vertical-prototype', {
-      results: searchResult.length,
-      searchTerm: req.searchTerm,
-      searchResult: searchResult,
-      photoID: req.photoID,
-      category: req.category
-    });
-  })
   .get('/display/:id', display, (req, res) => {
     res.render('pages/display', {
-      fileName: req.imageName,
-      description: req.imageDescription
+      fileName: req.image,
+      name: req.imageName,
+      description: req.imageDescription,
+      category: req.imageCategory
     });
+  })
+  .post('/display/:id', (req, res) => {
+    var photo = path.join(photoDirectory, req.body.fileName);
+    var extension = photo.split('.').pop()
+    res.download(photo, `StockOverflow-${req.params.id}.${extension}`);
   })
   .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {
     if (req.session.user == 'guest') {
       res.redirect('/login');
     } else {
-      res.redirect('back');
+      res.redirect('/upload');
     }
   })
   .get('/about', (req, res) => res.render('pages/about'))
@@ -321,3 +348,20 @@ express()
   .get('/about/NickStepanov', (req, res) => res.render('pages/aboutNick'))
   .get('/about/BrandonTong', (req, res) => res.render('pages/aboutBrandon'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+// .get('/vertical-prototype', search, (req, res) => {
+
+//   //It is here that we pass the results of the query to the renderer.
+//   //The page will dynamically load data based on the results.
+//   var searchResult = req.searchResult;
+//   if (!req.photoID) {
+//     req.photoID = 1
+//   }
+//   res.render('pages/vertical-prototype', {
+//     results: searchResult.length,
+//     searchTerm: req.searchTerm,
+//     searchResult: searchResult,
+//     photoID: req.photoID,
+//     category: req.category
+//   });
+// })

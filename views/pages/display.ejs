@@ -2,90 +2,11 @@
 <!-- Template by quackit.com -->
 <html>
 	<head>
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title> Upload Page</title>
+		<title> Download Image</title>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-		<style type="text/css">
-		
-			body {
-				margin:0;
-				padding:0;
-				font-family: Sans-Serif;
-				line-height: 1.5em;
-			}
-			
-			header {
-				background: lightblue;
-				height: 100px;
-			}
-			
-			header h1 {
-				margin: 0;
-				padding-top: 15px;
-			}
-			
-			main {
-				padding-bottom: 10010px;
-				margin-bottom: -10000px;
-				float: left;
-				width: 100%;
-			}
-			
-			nav {
-				padding-bottom: 10010px;
-				margin-bottom: -10000px;
-				float: left;
-				width: 230px;
-				margin-left: -230px;
-				background: #eee;
-			}
-			
-			footer {
-				clear: left;
-				width: 100%;
-				background: lightblue;
-				text-align: center;
-				padding: 4px 0;
-			}
-		
-			#wrapper {
-				overflow: hidden;
-			}
-						
-			#content {
-				margin-right: 230px; /* Same as 'nav' width */
-			}
-		
-		#description
-		{
-		
-		width = 800px;
-		font-size:14pt;
-		}
-			
-			.innertube {
-		text-align: center;
-				margin: 15px; /* Padding for content */
-				margin-top: 0;
-			}
-		
-			p {
-				color: #555;
-			}
-		
-			nav ul {
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			
-			nav ul a {
-				color: darkgreen;
-				text-decoration: none;
-			}
-		
-		</style>
-		
+
 	</head>
 	
 	<body>
@@ -94,36 +15,55 @@
 		<div id="wrapper">
 			
 			<main>
-				<div id="content">
+				<div class="container" id="content">
+                    <div class="row">
+                        <div class="col-xs-4 col-xs-offset-1 col-sm-4 col-sm-offset-1 col-md-6 col-md-offset-2 col-lg-6 col-lg-offset-3">
 					<img src="/images/StockPhotos/<%= fileName %>"  >
+                        </div>
 					<br><br>
-					<p>Description:</p><br>
-					<p> <%= description %> </p><br>
-					<button type="submit">Download</button>
-					<br>
-					<p>Please note that by downloading you agree to not sue us please. There are no refunds for any of our photos.</p></div>
+                    </div>
+                    <div class="row">
+                    <div class="col-xs-4 col-xs-offset-1 col-sm-4 col-sm-offset-1 col-md-6 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                    <div class="row">
+					<p>Description: <%= description %></p><br>
+                    </div>
+                    <div class="row">
+					<p>Category: <%= category %></p><br>
+                    </div>
+                    <div class="row">
+					<p>Image Name: <%= name %> </p><br>
+                    </div>
+                    </div>
+                        </div>
+                    
+					<form method="POST">
+                        <div class="col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-6 col-lg-4 col-lg-offset-8">
+						<button name="filename" class="btn btn-warning btn-lg" value="<%= fileName %>">Download Image</button>
+                        </div>
+                 
+						<!--<button name="fileName" value="<%= fileName %>">Download</button>-->
+					</form>
+                    <div class="row">
+                        <br><br><br><br>
+                        
+					
+                  
+
+                            <p>Please note that by downloading you agree to not sue us please. There are no refunds for any of our photos.</p></div>
+                    </div>
+               
 				</main>
-				
-				<nav>
-					<div class="innertube">
-						<h3>Our Sponsors</h3>
-						<ul>
-							<li><a href="#">Your ad can be here</a></li>
-							<li><a href="#">Your ad can be here</a></li>
-							<li><a href="#">Your ad can be here</a></li>
-							<li><a href="#">Your ad can be here</a></li>
-							<li><a href="#">Your ad can be here</a></li>
-						</ul>
-					</div>
-				</nav>
+
 				
 			</div>
 			
-			<footer>
-				<div class="innertube">
-					<p>Thank you for choosing STOCK OVERFLOW!</p>
-				</div>
-			</footer>
+		<footer>
+        
+			<div class="footer-copyright text-center py-3">
+				<p>Thank you for choosing STOCK OVERFLOW! </p>
+			</div>
+          
+		</footer>
 			
 		</body>
 	</html>
