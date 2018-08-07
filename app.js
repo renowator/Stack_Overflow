@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
+var ua = require("universal-analytics");
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -325,6 +326,7 @@ express()
     resave: false,
     saveUninitialized: true
   }))
+  .use(ua.middleware("UA-123517962-1", {cookieName: '_ga'}))
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
@@ -335,6 +337,7 @@ express()
   .set('view engine', 'ejs')
   .get('/', validateSearch, search, (req, res) => {
 
+    req.visitor.pageview("/").send();
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
@@ -412,19 +415,3 @@ express()
   .get('/about/BrandonTong', (req, res) => res.render('pages/aboutBrandon'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
-// .get('/vertical-prototype', search, (req, res) => {
-
-//   //It is here that we pass the results of the query to the renderer.
-//   //The page will dynamically load data based on the results.
-//   var searchResult = req.searchResult;
-//   if (!req.photoID) {
-//     req.photoID = 1
-//   }
-//   res.render('pages/vertical-prototype', {
-//     results: searchResult.length,
-//     searchTerm: req.searchTerm,
-//     searchResult: searchResult,
-//     photoID: req.photoID,
-//     category: req.category
-//   });
-// })
