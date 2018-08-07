@@ -21,56 +21,6 @@
 	<body>
 		
 		<%- include ../partials/nav.ejs %>
-
-		<div class="container-fluid" id="largeimage">
-			<img class="background" src="/images/city.jpg" >
-			
-			<div class ="container" id="centered">
-                <div class="row" >
-                    <div class="column"><br></div>Your Ultimate <br>Photo Destination</div>
-                <div class="row" >
-                    <div class="column">
-            <div class="input-group">
-  
-				<form>
-                    <div class="input-group-prepend" >
-					<select class="input-group-text" name ="category" onchange="this.form.submit()" id="select">
-						<option value="">All Categories</option>
-						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
-						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
-						<option value="People" <% if (category == "People") { %> selected <% } %> >People</option>
-						<option value="Food" <% if (category == "Food") { %> selected <% } %> >Food</option>
-					</select>
-                      </div>  
-					<input type="text" class="form-control" name="search" placeholder="Search.." id="mainsearchbar">
-                    
-                    <br>
-                    <div class="input-group-append">
-					<input type="submit" align="center" class="input-group-text" value="Search!">
-                    </div>
-				</form>
-			           </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-		
-       
-<div class="container">
-<div class="row">
-    <div class="column"><br></div><div class="column"><br></div>
-		<% if (searchTerm != undefined) { %>
-            <p><%= results %> of <%= results %> results displayed.</p>
-            <p><%= message %></p>
-        <% } %>
-    </div>
-        <!-- Search Results -->
-        
-            <div class="row" id="result"><br>
-            </div>
-   
-    </div>
-		<br>
 		<!-- Middle -->
 		<div class="row">
 			<div class="column">
@@ -108,6 +58,53 @@
                 </a>
 			</div>
         </div>
+		<div class="container-fluid" id="largeimage">
+			<img class="background" src="/images/city.jpg" >
+			
+			<div class ="container" id="centered">
+                    <div class="column">
+            <div class="input-group">
+  
+				<form>
+                    <div class="input-group-prepend" >
+					<select class="input-group-text" name ="category" onchange="this.form.submit()" id="select">
+						<option value="">All Categories</option>
+						<option value="Nature" <% if (category == "Nature") { %> selected <% } %> >Nature</option>
+						<option value="Animals" <% if (category == "Animals") { %> selected <% } %> >Animals</option>
+						<option value="People" <% if (category == "People") { %> selected <% } %> >People</option>
+						<option value="Food" <% if (category == "Food") { %> selected <% } %> >Food</option>
+					</select>
+                      </div>  
+					<input type="text" class="form-control" name="search" placeholder="Search.." id="mainsearchbar">
+                    
+                    <br>
+                    <div class="input-group-append">
+					<input type="submit" align="center" class="input-group-text" value="Search!">
+                    </div>
+				</form>
+			           </div>
+                    </div>
+                </div>
+            </div>
+       
+		
+       
+<div class="container">
+<div class="row">
+    <div class="column"><br></div><div class="column"><br></div>
+		<% if (searchTerm != undefined) { %>
+            <p><%= results %> of <%= results %> results displayed.</p>
+            <p><%= message %></p>
+        <% } %>
+    </div>
+        <!-- Search Results -->
+        
+            <div class="row" id="result"><br>
+            </div>
+   
+    </div>
+		<br>
+
    
 		<!-- Footer -->
 		<div class="footer"></div>
