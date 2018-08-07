@@ -13,7 +13,7 @@
 		<script>
 		$( document ).ready(function() {
 		<% for (var i = 0; i < searchResult.length; i++) { %>
-		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
+		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>" target="_blank"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
 		<% } %>
 		});
 		</script>
@@ -21,7 +21,7 @@
 	<body>
 		
 		<%- include ../partials/nav.ejs %>
-<div class="container" id="wrapper">
+
 		<div class="container-fluid" id="largeimage">
 			<img class="background" src="/images/city.jpg" >
 			
@@ -150,7 +150,7 @@
 				</div>
 			</div>
     </div>
-        </div>
+   
 		<!-- Footer -->
 		<div class="footer"></div>
 		
