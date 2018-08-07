@@ -357,16 +357,19 @@ express()
         usernameMessage : req.usernameMessage,
         passwordMessage : req.passwordMessage,
         usernameValid : req.usernameValid,
-        passwordValid : req.passwordValid
+        passwordValid : req.passwordValid,
+        username : ""
   }))
   .post('/login', validateLogin, login, (req, res) => {
     if (res.loginValid) {
       res.redirect('/');
     } else {
       console.log(req.usernameMessage, req.passwordMessage);
+      if (req.passwordValid == "is-valid") {req.passwordValid = "";}
       res.render('pages/login', {
         usernameMessage : req.usernameMessage,
         usernameValid : req.usernameValid,
+        username : req.body.username,
         passwordMessage : req.passwordMessage,
         passwordValid   : req.passwordValid
       });
@@ -400,6 +403,7 @@ express()
   })
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/admin', (req, res) => res.render('pages/admin'))
+  .get('/password-reset', (req, res) => res.render('pages/password'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
   .get('/about/AndrewAndrawo', (req, res) => res.render('pages/aboutAndrew'))

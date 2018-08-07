@@ -19,7 +19,7 @@
 				<br>
 				<div class="form-group row">
 					<label for="username" class="col-form-label col-1 offset-1">Username:</label>
-					<input type="textusr" id="username" name="username" class="form-control <%= usernameValid %>" required>
+					<input type="textusr" id="username" name="username" value="<%= username %>"class="form-control <%= usernameValid %>" required>
 					<div class="invalid-feedback offset-1">
 						<%= usernameMessage %>
 					</div>
@@ -32,7 +32,7 @@
 						<%= passwordMessage %>
 					</div>
 				</div>
-				<a href="/register" style="width: 120px" class="offset-1">Forgot Password</a>
+				<a href="/password-reset" style="width: 120px" class="offset-1">Forgot Password</a>
 				<br><br>
 				<div id="lower row">
 					<!--<input type="checkbox"><label for="checkbox">Keep me logged in</label> !-->
