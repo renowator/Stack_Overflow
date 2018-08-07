@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
-const download = require('download-file')
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -136,8 +135,45 @@ function register(req, res, next) {
   });
 }
 
+function validateLogin(req, res, next) {
+  console.log("validating login")
+  var valid = "is-valid";
+  var invalid = "is-invalid";
+
+  req.usernameMessage = "";
+  req.passwordMessage = "";
+  //Validate Username
+  if (req.body.username == "") {
+    req.usernameValid = invalid;
+    req.usernameMessage = "Username is a required field.";
+  } else if (req.body.username.length >= 40) {
+    req.usernameValid = invalid;
+    req.usernameMessage = "Username must be no more than 40 characters long.";
+  } else if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+    req.usernameValid = invalid;
+    req.usernameMessage = "Username must contain only alphanumeric characters.";
+  } else {
+    req.usernameValid = valid;
+  }
+
+  //Validate Password
+  if (req.body.password == "") {
+    req.passwordValid = invalid;
+    req.passwordMessage = "Password is a required field.";
+  } else if (req.body.password.length >= 40) {
+    req.passwordValid = invalid;
+    req.passwordMessage = "Password must be no more than 40 characters long.";
+  } else {
+    req.passwordValid = valid;
+  }
+
+  req.loginValid = req.usernameValid == valid && req.passwordValid == valid;
+  next();
+}
+
 function login(req, res, next) {
 
+  if (!req.loginValid) {next();}
 
   database.query('SELECT ID, Username, Password FROM Users WHERE Username = $1', [req.body.username], (err, result) => {
     if (err) {
@@ -191,6 +227,10 @@ function validateUser(req, res, next) {
   next();
 }
 
+// This function is called before search to validate the input. 
+// Currently there are two conditions, that the search term contains only alphanumeric characters,
+// and that the search term is 50 characters or fewer.
+// If invalid, the search does not complete and an error message is passed to the search result page.
 function validateSearch(req, res, next) {
   req.hasSearched = true
   req.isValid = false;
@@ -246,11 +286,15 @@ function search(req, res, next) {
       }
 
       //The results are parsed as JSON into the image column String that points to a file.
-      req.searchResult = result.rows.map(x => String(x.image));
-      req.photoID = result.rows.map(x => String(x.id));
-      req.searchTerm = searchTerm;
-      req.category = "";
-      next();
+      if (result != undefined) {
+        req.searchResult = result.rows.map(x => String(x.image));
+        req.photoID = result.rows.map(x => String(x.id));
+      } else {
+        req.searchResult = "";
+      }
+        req.searchTerm = searchTerm;
+        req.category = "";
+        next();
     });
   } else {
     database.query('SELECT Image, ID FROM Posting WHERE Category = $1 AND Name ~~* $2', [category, '%' + searchTerm + '%'], (err, result) => {
@@ -309,9 +353,24 @@ express()
       message: req.message
     });
   })
-  .get('/login', (req, res) => res.render('pages/login'))
-  .post('/login', login, (req, res) => {
-    res.redirect('/');
+  .get('/login', (req, res) => res.render('pages/login', {
+        usernameMessage : req.usernameMessage,
+        passwordMessage : req.passwordMessage,
+        usernameValid : req.usernameValid,
+        passwordValid : req.passwordValid
+  }))
+  .post('/login', validateLogin, login, (req, res) => {
+    if (res.loginValid) {
+      res.redirect('/');
+    } else {
+      console.log(req.usernameMessage, req.passwordMessage);
+      res.render('pages/login', {
+        usernameMessage : req.usernameMessage,
+        usernameValid : req.usernameValid,
+        passwordMessage : req.passwordMessage,
+        passwordValid   : req.passwordValid
+      });
+    }
   })
   .get('/logout', logout, (req, res) => res.redirect('/'))
   .get('/register', (req, res) => res.render('pages/register'))
