@@ -2,13 +2,12 @@
 <!-- Template by quackit.com -->
 <html>
 	<head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title> Upload Page</title>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-
 		<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 		<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 		<script type="text/javascript">
 		function readURL(input) {
 		if (input.files && input.files[0]) {
@@ -16,14 +15,13 @@
 		reader.onload = function (e) {
 		$('#blah')
 		.attr('src', e.target.result)
-		.width(150)
-		.height(200);
+		.attr('hidden', false)
 		};
 		reader.readAsDataURL(input.files[0]);
 		}
 		}
 		</script>
-		
+		<%- include ../partials/analytics.ejs %>
 	</head>
 	
 	<body>
@@ -34,68 +32,77 @@
 			<main>
 				<div class="col-lg" id="content">
 					<div class="innertube">
-						<h1>Please fill in all fields marked with (*) and select image to upload</h1>
+						<%= uploadMessage %>
 					</div>
-                    
+					<div class="innertube">
+						<legend>Please fill in all fields marked with (*) and select image to upload</legend>
+					</div>
+					
 					<form enctype="multipart/form-data" method="post">
-                        <div class="row">
-                            <div class="col-sm-3 col-md-3 col-lg-4">
-                                <div class="form-group">
-                                <label for="sel3">Select category(*)</label>
-                                <select class="form-control input-sm"  name="category" id="sel3" required>
-                                <option value="" disabled>None</option>
-                                <option value="Nature">Nature</option>
-                                <option value="Animals">Animals</option>
-                                <option value="People">People</option>
-                                <option value="Food">Food</option>
-                                </select>
-                                </div>
-                            </div>
-                        <br>
-                        </div>
-                         <div class="row">
-                            <div class="col-sm-3 col-md-3 col-lg-4">
-                            <div class="form-group">
-                                <label for="imgname">Image name(*):</label>
-                                    <input class="form-control input-lg" id="imgname" name="imageName"type="text" required>
-                                </div>
-                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group">
-						Description:<br>
-                            <textarea name="imageDescription" style="width:250px;height:150px;"></textarea><br>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-sm-1 col-md-3 col-lg-8">
-                           
-						<input type='file' onchange="readURL(this);" name="file" required/>
-                            
-                            <img id="blah" src="#" alt="your image" /><br>
-                            </div>
-                        </div>
-                        <div class="row">
-                        <div class="col-sm-4 col-sm-offset-6">
-						<button type="submit" class="btn btn-warning btn-lg">Upload Photo</button>
-                        </div>
-                        </div>
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-4">
+								<div class="form-group">
+									<label for="sel3">Select category(*)</label>
+									<select class="form-control input-sm"  name="category" id="sel3" required>
+										<option value="" disabled selected>Select Category</option>
+										<option value="Nature">Nature</option>
+										<option value="Animals">Animals</option>
+										<option value="People">People</option>
+										<option value="Food">Food</option>
+									</select>
+								</div>
+							</div>
+							<br>
+						</div>
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-4">
+								<div class="form-group">
+									<label for="imageName">Image name(*):</label>
+									<input class="form-control input-lg <%= nameValid %>" id="imageName" name="imageName" type="text" required>
+									<div class="invalid-feedback offset-1">
+										<%= nameMessage %>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-4">
+								<div class="form-group">
+									Description:<br>
+									<textarea class="<%= descriptionValid %>" name="imageDescription" style="width:250px;height:150px;"></textarea>
+									<div class="invalid-feedback offset-1">
+										<%= descriptionMessage %>
+									</div><br>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-1 col-md-3 col-lg-8">
+								
+								<input type='file' onchange="readURL(this);" name="file" required/>
+								
+								<img id="blah" src="#" alt="your image" hidden/><br><br>
+								<p>Please note that once the upload is complete we will need to review the content and it will not be visible on the website automatically. If your content is rejected, we will notify you via email. Thank you for your understanding!</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-4">
+								<button type="submit" class="btn btn-warning btn-lg">Upload Photo</button>
+							</div>
+						</div>
 					</form>
-					<br>
-					<p>Please note that once the upload is complete we will need to review the content and it would not be visible on the website automatically. If your content is rejected, we will notify you via email. Thank you for your understanding!</p>
 				</div>
 			</main>
 			
-	
+			
 		</div>
 		
 		<footer>
-        
+			
 			<div class="footer-copyright text-center py-3">
 				<p>Thank you for choosing STOCK OVERFLOW! </p>
 			</div>
-          
+			
 		</footer>
 		
 	</body>

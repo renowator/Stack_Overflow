@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html>
-<title>Stock Overflow</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-<script src="/jquery/jquery.js"></script>
-
-<% include ../partials/login.ejs %>
-<body>
-
-  <% include ../partials/nav.ejs %>
-       
-<form id="login" method="post">
-<label for="username">Username:</label>
-<input type="textusr" id="username" name="username" required>
-<br>
-<label for="password">Password:</label>
-<input type="password" id="password" name="password" required>
-<br>
-<input type ="submit" value="Forgot Password" >
-<br><br>
-<div id="lower">
-<!--<input type="checkbox"><label for="checkbox">Keep me logged in</label> !-->
-<input type="submit" value="Login" style= "width: 120px">
-</form>
-<button type="button"  onclick="location.href='/register';" style="width: 120px">Sign Up</button>
-<br> 
-
-</body>
-</html>
+	<title>Stock Overflow</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="/jquery/jquery.js"></script>
+	<% include ../partials/login.ejs %>
+	<%- include ../partials/analytics.ejs %>
+	<body>
+		<% include ../partials/nav.ejs %>
+		<div class="border border-primary rounded container" style="margin: 10px">
+			<form id="login" method="post" novalidate>
+				<legend class="offset-1">Log In to Stock Overflow!</legend>
+				<div class="offset-1"><a href="/register">Not a registered user? Sign up here!</a></div>
+				<br>
+				<div class="form-group row">
+					<label for="username" class="col-form-label col-1 offset-1">Username:</label>
+					<input type="textusr" id="username" name="username" value="<%= username %>"class="form-control <%= usernameValid %>" required>
+					<div class="invalid-feedback offset-1">
+						<%= usernameMessage %>
+					</div>
+				</div>
+				<br>
+				<div class="form-group row">
+					<label for="password" class="col-form-label col-1 offset-1">Password:</label>
+					<input type="password" id="password" name="password" class="form-control <%= passwordValid %>" required>
+					<div class="invalid-feedback offset-1">
+						<%= passwordMessage %>
+					</div>
+				</div>
+				<a href="/password-reset" style="width: 120px" class="offset-1">Forgot Password</a>
+				<br><br>
+				<div id="lower row">
+					<!--<input type="checkbox"><label for="checkbox">Keep me logged in</label> !-->
+					<input type="submit" name="submit" value="login" hidden>
+					<input type="submit" name="submit" value="Cancel" style= "width: 120px" class="offset-1">
+					<input type="submit" name="submit" value="Login" style= "width: 120px" class="offset-1">
+				</form>
+				<br>
+			</div>
+		</body>
+	</html>

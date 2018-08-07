@@ -13,23 +13,56 @@
 		<script>
 		$( document ).ready(function() {
 		<% for (var i = 0; i < searchResult.length; i++) { %>
-		document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:100px; height:100px;"></a><br>`;
+		document.getElementById('result').innerHTML += `<div class="p-2"><a href="display/<%= photoID[i] %>" class="p-2"  target="_blank"><img src="/images/StockPhotos/Thumbnails/<%= searchResult[i] %>" style="width:400px; height:400px;"></a></div>`;
 		<% } %>
 		});
 		</script>
+		<%- include ../partials/analytics.ejs %>
 	</head>
 	<body>
 		
 		<%- include ../partials/nav.ejs %>
-		
+		<!-- Middle -->
+		<div class="row">
+			<div class="column">
+                    <a href="/?category=Animals&search=" >
+                
+				<div class="container">
+					<img src="/images/lion.jpg" style="width:100%">
+                        <div class="after"> Animals </div>
+				
+			</div>
+            </a>
+		</div>
+			<div class="column">
+            <a href="/?category=Nature&search=" >
+				<div class="container">
+					<img src="/images/nature2.jpg" style="width:100%">
+					<div class="after"> Nature </div>
+				</div>
+                </a>
+			</div>
+            <div class="column">
+             <a href="/?category=Food&search=" >
+				<div class="container">
+					<img src="/images/hamburger.jpg" style="width:100%">
+					<div class="after"> Food </div>
+				</div>
+                </a>
+			</div>
+			<div class="column">
+            <a href="/?category=People&search=" >
+				<div class="container">
+					<img src="/images/festival.jpg" style="width:100%">
+					<div class="after"> People </div>
+				</div>
+                </a>
+			</div>
+        </div>
 		<div class="container-fluid" id="largeimage">
 			<img class="background" src="/images/city.jpg" >
 			
 			<div class ="container" id="centered">
-                <div class="row"><br></div>
-                <div class="row" >
-                    <div class="column"><br></div>Your Ultimate <br>Photo Destination</div>
-                <div class="row" >
                     <div class="column">
             <div class="input-group">
   
@@ -44,20 +77,20 @@
 					</select>
                       </div>  
 					<input type="text" class="form-control" name="search" placeholder="Search.." id="mainsearchbar">
-                    <!--
+                    
                     <br>
                     <div class="input-group-append">
 					<input type="submit" align="center" class="input-group-text" value="Search!">
-                    </div>-->
+                    </div>
 				</form>
 			           </div>
                     </div>
                 </div>
             </div>
-        </div>
+       
 		
-
-<div class="container">
+       
+<div class="container-fluid">
 <div class="row">
     <div class="column"><br></div><div class="column"><br></div>
 		<% if (searchTerm != undefined) { %>
@@ -67,91 +100,13 @@
     </div>
         <!-- Search Results -->
         
-            <div class="row" id="result"><br>
+            <div class="container-fluid row mx-auto text-center justify-content-center align-items-center" id="result"><br>
             </div>
    
     </div>
 		<br>
-		<!-- Middle -->
-		<div class="row">
-			<div class="column">
-				<div class="container">
-					<img  src="/images/beach.jpg" style="width:100%">
-					<div class="after"> Beaches </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/candy.jpg" style="width:100%">
-					<div class="after"> Candy </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/landscape2.jpg" style="width:100%">
-					<div class="after"> Landscapes </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/lion.jpg" style="width:100%">
-					<div class="after"> Animals </div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="column">
-				<div class="container">
-					<img src="/images/nature2.jpg" style="width:100%">
-					<div class="after"> Nature </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/cat.jpg" style="width:100%">
-					<div class="after"> Cats </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/cityscape.jpg" style="width:100%">
-					<div class="after"> Cityscapes </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/ocean.jpg" style="width:100%">
-					<div class="after"> Oceans </div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="column">
-				<div class="container">
-					<img src="/images/hamburger.jpg" style="width:100%">
-					<div class="after"> Statues </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/festival.jpg" style="width:100%">
-					<div class="after"> Festivals </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/nebula.jpg" style="width:100%">
-					<div class="after"> Space </div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="container">
-					<img src="/images/cafe.jpg" style="width:100%">
-					<div class="after"> Cafes </div>
-				</div>
-			</div>
-    </div></div>
-		
+
+   
 		<!-- Footer -->
 		<div class="footer"></div>
 		
