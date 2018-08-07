@@ -8,6 +8,7 @@ img {margin-bottom: -7px}
 .topnav {
     overflow: hidden;
     background-color: #444;
+    padding-bottom: 15px;
 }
 
 /* Style the topnav links */
@@ -56,9 +57,10 @@ img {margin-bottom: -7px}
     background-size:cover;
 	background-position:center;
 	background-repeat:no-repeat;
-    position: relative;
+    position:  relative;
     text-align: center;
-    max-width: 1500px;
+    max-width: 1200px;
+    padding-top: 220px;
 }
 
 .background {
@@ -73,7 +75,7 @@ img {margin-bottom: -7px}
     top: 35%;
     left: 60%;
     transform: translate(-50%, -50%);
-    color:white;
+    color:black;
     font-size: 250%;
     font-weight: bold;
 }
