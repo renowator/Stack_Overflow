@@ -497,30 +497,34 @@ express()
     });
   })
   .post('/display/:id', (req, res) => {
-    var photo = req.body.fileName;
-    var extension = photo.split('.').pop()
-    var params = {
-      localFile: `~/StockOverflow-${req.params.id}.${extension}`,
+    if (req.session.user == 'guest') {
+      res.redirect('/login');
+    } else {
+      var photo = req.body.fileName;
+      var extension = photo.split('.').pop()
+      var params = {
+        localFile: `~/StockOverflow-${req.params.id}.${extension}`,
 
-      s3Params: {
-        Bucket: `${process.env.S3_BUCKET_NAME}`,
-        Key: photo.split('/').pop()
-      },
-    };
-    var downloader = client.downloadFile(params);
-    console.log(photo.split('/').pop())
-    console.log(req.body.fileName)
-    downloader.on('error', function(err) {
-      console.error("unable to download:", err.stack);
-      res.redirect('back');
-    });
-    downloader.on('progress', function() {
-      console.log("progress", downloader.progressAmount, downloader.progressTotal);
-    });
-    downloader.on('end', function() {
-      console.log("done downloading");
-      res.download(`~/StockOverflow-${req.params.id}.${extension}`);
-    });
+        s3Params: {
+          Bucket: `${process.env.S3_BUCKET_NAME}`,
+          Key: photo.split('/').pop()
+        },
+      };
+      var downloader = client.downloadFile(params);
+      console.log(photo.split('/').pop())
+      console.log(req.body.fileName)
+      downloader.on('error', function(err) {
+        console.error("unable to download:", err.stack);
+        res.redirect('back');
+      });
+      downloader.on('progress', function() {
+        console.log("progress", downloader.progressAmount, downloader.progressTotal);
+      });
+      downloader.on('end', function() {
+        console.log("done downloading");
+        res.download(`~/StockOverflow-${req.params.id}.${extension}`);
+      });
+    }
   })
   .get('/upload', (req, res) => res.render('pages/upload', {
     nameMessage: "",
