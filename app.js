@@ -8,7 +8,17 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
-var ua = require("universal-analytics");
+const ua = require("universal-analytics");
+const s3 = require('s3');
+
+console.log(process.env.S3_BUCKET_NAME)
+
+var client = s3.createClient({
+  s3Options: {
+    accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
+    secretAccessKey: `${process.env.AWS_SECRET_ACCESS_KEY}`,
+  },
+});
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -118,7 +128,55 @@ function upload(req, res, next) {
                   next();
                 }
                 req.uploadMessage = `Upload succeeded. To view your image, click here, or upload another image. Thank you!`;
-                next();
+
+                //Actual Upload!!!
+                var params = {
+                  localFile: path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`),
+
+                  s3Params: {
+                    Bucket: `${process.env.S3_BUCKET_NAME}`,
+                    Key: `${req.session.user}_${timestamp}.${extension}`,
+                    ACL: "public-read"
+                  },
+                };
+                var uploader = client.uploadFile(params);
+                uploader.on('error', function(err) {
+                  console.error("unable to upload:", err.stack);
+                  next();
+                });
+                uploader.on('progress', function() {
+                  console.log("progress", uploader.progressMd5Amount,
+                    uploader.progressAmount, uploader.progressTotal);
+                });
+                uploader.on('end', function() {
+                  console.log("done uploading");
+                  //Thumbnail Upload
+                  var params = {
+                    localFile: path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`),
+
+                    s3Params: {
+                      Bucket: `${process.env.S3_BUCKET_NAME}`,
+                      Key: `Thumbnails/${req.session.user}_${timestamp}.${extension}`,
+                      ACL: "public-read"
+                    },
+                  };
+                  var uploader = client.uploadFile(params);
+                  uploader.on('error', function(err) {
+                    console.error("unable to upload:", err.stack);
+                    next();
+                  });
+                  uploader.on('progress', function() {
+                    console.log("progress", uploader.progressMd5Amount,
+                      uploader.progressAmount, uploader.progressTotal);
+                  });
+                  uploader.on('end', function() {
+                    console.log("done uploading");
+                    next();
+                  });
+                });
+
+
+                //Actual Upload!!!
               });
             });
           });
@@ -150,6 +208,8 @@ function upload(req, res, next) {
     });
   }
 }
+
+
 
 function register(req, res, next) {
 
@@ -325,7 +385,7 @@ function search(req, res, next) {
 
       //The results are parsed as JSON into the image column String that points to a file.
       if (result != undefined) {
-        req.searchResult = result.rows.map(x => String(x.image));
+        req.searchResult = result.rows.map(x => s3.getPublicUrlHttp(process.env.S3_BUCKET_NAME, `Thumbnails/` + String(x.image)));
         req.photoID = result.rows.map(x => String(x.id));
       } else {
         req.searchResult = "";
@@ -345,7 +405,7 @@ function search(req, res, next) {
       }
 
       if (result != undefined) {
-        req.searchResult = result.rows.map(x => String(x.image));
+        req.searchResult = result.rows.map(x => s3.getPublicUrlHttp(process.env.S3_BUCKET_NAME, `Thumbnails/` + String(x.image)));
         req.photoID = result.rows.map(x => String(x.id));
       } else {
         req.searchResult = "";
@@ -428,17 +488,39 @@ express()
     if (req.imageDescription == "null") {
       req.imageDescription = "No description provided."
     }
+
     res.render('pages/display', {
-      fileName: req.image,
+      fileName: s3.getPublicUrlHttp(process.env.S3_BUCKET_NAME, req.image),
       name: req.imageName,
       description: req.imageDescription,
       category: req.imageCategory
     });
   })
   .post('/display/:id', (req, res) => {
-    var photo = path.join(photoDirectory, req.body.fileName);
+    var photo = req.body.fileName;
     var extension = photo.split('.').pop()
-    res.download(photo, `StockOverflow-${req.params.id}.${extension}`);
+    var params = {
+      localFile: `~/StockOverflow-${req.params.id}.${extension}`,
+
+      s3Params: {
+        Bucket: `${process.env.S3_BUCKET_NAME}`,
+        Key: photo.split('/').pop()
+      },
+    };
+    var downloader = client.downloadFile(params);
+    console.log(photo.split('/').pop())
+    console.log(req.body.fileName)
+    downloader.on('error', function(err) {
+      console.error("unable to download:", err.stack);
+      res.redirect('back');
+    });
+    downloader.on('progress', function() {
+      console.log("progress", downloader.progressAmount, downloader.progressTotal);
+    });
+    downloader.on('end', function() {
+      console.log("done downloading");
+      res.download(`~/StockOverflow-${req.params.id}.${extension}`);
+    });
   })
   .get('/upload', (req, res) => res.render('pages/upload', {
     nameMessage: "",
