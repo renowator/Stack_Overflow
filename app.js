@@ -104,7 +104,8 @@ function validateUpload(req, res, next) {
 }
 
 function upload(req, res, next) {
-  if (req.session.user === 'guest') {
+  console.log(req.session)
+  if (req.session.user == 'guest') {
     next();
   } else {
     var timestamp = 0; //defaults
@@ -339,6 +340,7 @@ function validateUser(req, res, next) {
     user: req.session.user,
     id: req.session.userid
   };
+  console.log(req.session.user)
 
   next();
 }
@@ -437,9 +439,11 @@ function search(req, res, next) {
 
 express()
   .use(session({
-    secret: 'csc648-stock-overflow',
-    resave: false,
-    saveUninitialized: true
+    name: 'session',
+    keys: ['CSC648-Stock-Overflow'],
+
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }))
   .use(ua.middleware("UA-123517962-1", {
     cookieName: '_ga'
