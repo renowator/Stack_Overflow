@@ -555,11 +555,15 @@ express()
     descriptionValid: "",
     uploadMessage: ""
   }))
-  .post('/upload', validateUser, upload, (req, res) => {
-    console.log("servicing the request")
-    if (req.session.user == 'guest') {
-      console.log("verified as guest")
-      res.redirect('/');
+  .post('/upload', upload, (req, res) => {
+    if (req.session.user === 'guest') {
+      res.render('pages/login', {
+        usernameMessage: "",
+        usernameValid: "",
+        username: "",
+        passwordMessage: "",
+        passwordValid: ""
+      });
     } else {
       res.render('pages/upload', {
         nameMessage: req.nameMessage,
@@ -591,7 +595,7 @@ express()
       });
     }
   })
-  .post('/admin', displayAll, (req, res) =>{
+  .post('/admin', displayAll, (req, res) => {
 
     var id = req.body.status.toString();
     var splitID = id.split(".")
