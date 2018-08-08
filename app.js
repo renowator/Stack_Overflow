@@ -36,7 +36,7 @@ const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
 const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
 // this function will display all of the images in the Database for admin page
-function displayAll(req, res, next){
+function displayAll(req, res, next) {
   database.query('SELECT * FROM Posting ORDER BY Status, Category DESC', (err, result) => {
     if (err) {
       console.log(err);
@@ -548,23 +548,20 @@ express()
       });
     }
   })
-  .get('/upload', (req, res) => res.render('pages/upload', {
-    nameMessage: "",
-    nameValid: "",
-    descriptionMessage: "",
-    descriptionValid: "",
-    uploadMessage: ""
-  }))
-  .post('/upload', upload, (req, res) => {
-    if (req.session.user === 'guest') {
-      res.render('pages/login', {
-        usernameMessage: "",
-        usernameValid: "",
-        username: "",
-        passwordMessage: "",
-        passwordValid: ""
-      });
+  .get('/upload', (req, res) => {
+    if (req.session.user == 'guest') {
+      res.redirect('/login');
     } else {
+      res.render('pages/upload', {
+        nameMessage: "",
+        nameValid: "",
+        descriptionMessage: "",
+        descriptionValid: "",
+        uploadMessage: ""
+      })
+    }
+  })
+  .post('/upload', upload, (req, res) => {
       res.render('pages/upload', {
         nameMessage: req.nameMessage,
         nameValid: req.nameValid,
@@ -572,12 +569,11 @@ express()
         descriptionValid: req.descriptionValid,
         uploadMessage: req.uploadMessage
       });
-    }
   })
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/admin', (req, res) => res.render('pages/admin'))
-  .get('/admin', displayAll , (req, res) => {
-    if (req.session.user != 'admin'){
+  .get('/admin', displayAll, (req, res) => {
+    if (req.session.user != 'admin') {
       res.redirect('/login');
     } else {
       if (!req.results) {
@@ -589,7 +585,7 @@ express()
         results: req.results, // number of pictures
         image: req.image,
         description: req.imageDescription,
-        status:req.imageStatus,
+        status: req.imageStatus,
         photoID: req.photoID,
         category: req.imageCategory
       });
@@ -604,13 +600,13 @@ express()
 
     database.query('UPDATE Posting SET Status = ($1) WHERE ID = ($2)', [imgStatus, imgID]);
     if (!req.results) {
-        req.results = 0;
-      }
+      req.results = 0;
+    }
     res.render('pages/admin', {
       results: req.results, // number of pictures
       image: req.image,
       description: req.imageDescription,
-      status:req.imageStatus,
+      status: req.imageStatus,
       photoID: req.photoID,
       category: req.imageCategory
     });
