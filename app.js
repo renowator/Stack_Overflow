@@ -565,7 +565,6 @@ express()
     }
   })
   .get('/about', (req, res) => res.render('pages/about'))
-<<<<<<< HEAD
   .get('/admin', (req, res) => res.render('pages/admin'))
   .get('/admin', displayAll , (req, res) => {
     if (req.session.user != 'admin'){
@@ -606,15 +605,6 @@ express()
       category: req.imageCategory
     });
   })
-=======
-  .get('/admin', (req, res) => {
-    if (req.session.user != 'admin') {
-      res.redirect('/login');
-    } else {
-      res.render('pages/admin')
-    }
-  })
->>>>>>> 88427d28a9a82398ecd214680ad3ec439865b7af
   .get('/password-reset', (req, res) => res.render('pages/password'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
