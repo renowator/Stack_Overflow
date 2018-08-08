@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt');
 const session = require('express-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
-var ua = require("universal-analytics");
 
 //Currently the Database credentials are hardcoded. In the future this will be set to the environment variable
 //That value is currently incorrect on my computer, leading to errors in local environment testing.
@@ -25,65 +24,46 @@ var results = 0;
 const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
 const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
-function display(req, res, next) {
-  database.query('SELECT * FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
+// this function will display all of the images in the Database for admin page
+function displayAll(req, res, next){
+  database.query('SELECT * FROM Posting ORDER BY Status, Category DESC', (err, result) => {
     if (err) {
       console.log(err);
       next();
     }
-
-    req.image = String(result.rows[0].image)
-    req.imageName = String(result.rows[0].name)
-    req.imageDescription = String(result.rows[0].description)
-    req.imageCategory = String(result.rows[0].category)
-
-    //TODO get image uploader.
+    req.photoID = result.rows.map(x => String(x.id));
+    req.image = result.rows.map(x => String(x.image));
+    req.imageDescription = result.rows.map(x => String(x.name));
+    req.imageStatus = result.rows.map(x => String(x.status));
+    req.imageCategory = result.rows.map(x => String(x.category));
+    req.results = result.rows.length;
     next();
 
   });
 }
 
-function validateUpload(req, res, next) {
-  var valid = "is-valid";
-  var invalid = "is-invalid";
-
-  //Validate Image Name
-  if (req.body.imageName == "") {
-    req.nameValid = invalid;
-    req.nameMessage = "Image name is a required field.";
-  } else if (req.body.imageName.length > 40) {
-    req.nameValid = invalid;
-    req.nameMessage = "Image name must be no more than 40 characters long.";
-  } else if (!req.body.imageName.match(/^[a-zA-Z0-9\s]+$/)) {
-    req.nameValid = invalid;
-    req.nameMessage = "Image name must contain only alphanumeric characters and spaces.";
-  } else {
-    req.nameValid = valid;
-  }
-
-  //Validate Description
-  if (req.body.description != undefined) {
-    if (req.body.description.length > 255) {
-      req.descriptionValid = invalid;
-      req.descriptionMessage = "Description must be no more than 255 characters long.";
-    } else {
-      req.descriptionValid = valid;
+function display(req, res, next) {
+  database.query('SELECT Image, Name FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
+    if (err) {
+      console.log(err);
+      next();
     }
-  }
 
-  req.uploadValid = req.nameValid == valid && req.descriptionValid == valid;
-  next();
+    req.imageName = String(result.rows[0].image)
+    req.imageDescription = String(result.rows[0].name)
+    next();
+
+  });
 }
 
 function upload(req, res, next) {
   if (req.session.user === 'guest') {
+    console.log(`I'm a guest`);
     next();
   } else {
     var timestamp = 0; //defaults
     var extension = '.jpg' //defaults
-    var imageName = ''
-    var imageDescription = 'No description given'
-    var imageCategory = 'None'
+    var description = 'No description given'
     var form = new formidable.IncomingForm()
     form.multiples = true
     form.keepExtensions = true
@@ -93,54 +73,27 @@ function upload(req, res, next) {
         console.log(err);
         next();
       }
-
-      validateUpload(req, res, next);
-      if (req.uploadValid == false) {
-        next();
-      } else {
-        sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
-          .resize(400, 400)
-          .toFile(path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`), (err, info) => {
+      sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
+        .resize(100, 100)
+        .toFile(path.join(thumbnailDirectory, `${req.session.user}_${timestamp}.${extension}`), (err, info) => {
+          if (err) {
+            console.log(err);
+            next();
+          }
+          console.log(info);
+          database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5)', [description, 'Nature', 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
             if (err) {
               console.log(err);
               next();
             }
-            console.log(info);
-            database.query('INSERT INTO Posting VALUES(DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING ID;', [req.body.imageName, req.body.description, req.body.category, 'Pending', req.session.userid, `${req.session.user}_${timestamp}.${extension}`], (err, result) => {
-              if (err) {
-                console.log(err);
-                next();
-              }
-              console.log(result);
-              database.query('UPDATE Users SET Postings = Postings || $1 WHERE ID = $2', [`{${result.rows[0].id}}`, req.session.userid], (err, result) => {
-                if (err) {
-                  console.log(err);
-                  next();
-                }
-                req.uploadMessage = `Upload succeeded. To view your image, click here, or upload another image. Thank you!`;
-                next();
-              });
-            });
-          });
-      }
 
+            next();
+          });
+        });
+      console.log('upload succeeded');
     })
     form.on('field', function(name, value) {
-      switch (name) {
-        case "imageName":
-          req.body.imageName = value;
-          break;
-        case "imageDescription":
-          if (value != "") {
-            req.body.description = value;
-          }
-          break;
-        case "category":
-          req.body.category = value;
-          break;
-        default:
-          break;
-      }
+      description = value
     });
     form.on('fileBegin', function(name, file) {
       const [fileName, fileExt] = file.name.split('.')
@@ -148,7 +101,9 @@ function upload(req, res, next) {
       extension = fileExt;
       file.path = path.join(photoDirectory, `${req.session.user}_${timestamp}.${fileExt}`);
     });
+
   }
+
 }
 
 function register(req, res, next) {
@@ -165,47 +120,8 @@ function register(req, res, next) {
   });
 }
 
-function validateLogin(req, res, next) {
-  var valid = "is-valid";
-  var invalid = "is-invalid";
-
-  req.usernameMessage = "";
-  req.passwordMessage = "";
-  //Validate Username
-  if (req.body.username == "") {
-    req.usernameValid = invalid;
-    req.usernameMessage = "Username is a required field.";
-  } else if (req.body.username.length >= 40) {
-    req.usernameValid = invalid;
-    req.usernameMessage = "Username must be no more than 40 characters long.";
-  } else if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-    req.usernameValid = invalid;
-    req.usernameMessage = "Username must contain only alphanumeric characters.";
-  } else {
-    req.usernameValid = valid;
-  }
-
-  //Validate Password
-  if (req.body.password == "") {
-    req.passwordValid = invalid;
-    req.passwordMessage = "Password is a required field.";
-  } else if (req.body.password.length >= 40) {
-    req.passwordValid = invalid;
-    req.passwordMessage = "Password must be no more than 40 characters long.";
-  } else {
-    req.passwordValid = valid;
-  }
-
-  req.loginValid = req.usernameValid == valid && req.passwordValid == valid;
-  next();
-}
-
 function login(req, res, next) {
 
-  if (!req.loginValid) {
-    next();
-  }
-  console.log("logging in")
 
   database.query('SELECT ID, Username, Password FROM Users WHERE Username = $1', [req.body.username], (err, result) => {
     if (err) {
@@ -217,7 +133,7 @@ function login(req, res, next) {
       next();
     }
 
-    if (result.rows.length >= 1) {
+    if (result.rows.length == 1) {
       bcrypt.compare(req.body.password, String(result.rows[0].password), function(err, res) {
         if (res) {
           req.session.user = String(result.rows[0].username);
@@ -226,17 +142,11 @@ function login(req, res, next) {
             user: req.session.user,
             id: req.session.userid
           };
-        } else {
-          req.passwordValid = "is-invalid";
-          req.passwordMessage = "Username and password do not match. Please try again."
-          req.loginValid = false
         }
         next();
       });
     } else {
-      req.usernameValid = "is-invalid";
-      req.usernameMessage = "No user with that username exists. Please try again."
-      req.loginValid = false
+      //TODO: Show error to user, no username exists
       next();
     }
   });
@@ -252,6 +162,10 @@ function logout(req, res, next) {
   next();
 }
 
+function validateAdmin(req, res, next){
+
+}
+
 function validateUser(req, res, next) {
   if (!req.session.user) {
     req.session.user = 'guest'
@@ -265,11 +179,7 @@ function validateUser(req, res, next) {
   next();
 }
 
-// This function is called before search to validate the input. 
-// Currently there are two conditions, that the search term contains only alphanumeric characters,
-// and that the search term is 50 characters or fewer.
-// If invalid, the search does not complete and an error message is passed to the search result page.
-function validateSearch(req, res, next) {
+function validate(req, res, next) {
   req.hasSearched = true
   req.isValid = false;
   req.message = "";
@@ -324,12 +234,8 @@ function search(req, res, next) {
       }
 
       //The results are parsed as JSON into the image column String that points to a file.
-      if (result != undefined) {
-        req.searchResult = result.rows.map(x => String(x.image));
-        req.photoID = result.rows.map(x => String(x.id));
-      } else {
-        req.searchResult = "";
-      }
+      req.searchResult = result.rows.map(x => String(x.image));
+      req.photoID = result.rows.map(x => String(x.id));
       req.searchTerm = searchTerm;
       req.category = "";
       next();
@@ -363,20 +269,14 @@ express()
     resave: false,
     saveUninitialized: true
   }))
-  .use(ua.middleware("UA-123517962-1", {
-    cookieName: '_ga'
-  }))
   .use(validateUser)
   .use(express.static(path.join(__dirname, 'public')))
   .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
-  .use(express.urlencoded({
-    extended: false
-  }))
+  .use(express.urlencoded())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', validateSearch, search, (req, res) => {
+  .get('/', validate, search, (req, res) => {
 
-    req.visitor.pageview("/").send();
     //It is here that we pass the results of the query to the renderer.
     //The page will dynamically load data based on the results.
     var searchResult = req.searchResult;
@@ -395,74 +295,75 @@ express()
       message: req.message
     });
   })
-  .get('/login', (req, res) => res.render('pages/login', {
-    usernameMessage: req.usernameMessage,
-    passwordMessage: req.passwordMessage,
-    usernameValid: req.usernameValid,
-    passwordValid: req.passwordValid,
-    username: ""
-  }))
-  .post('/login', validateLogin, login, (req, res) => {
-    if (req.loginValid) {
-      res.redirect('/');
-    } else {
-      console.log(req.usernameMessage, req.passwordMessage);
-      if (req.passwordValid == "is-valid") {
-        req.passwordValid = "";
-      }
-      res.render('pages/login', {
-        usernameMessage: req.usernameMessage,
-        usernameValid: req.usernameValid,
-        username: req.body.username,
-        passwordMessage: req.passwordMessage,
-        passwordValid: req.passwordValid
-      });
-    }
+  .get('/login', (req, res) => res.render('pages/login'))
+  .post('/login', login, (req, res) => {
+    res.redirect('/');
   })
   .get('/logout', logout, (req, res) => res.redirect('/'))
   .get('/register', (req, res) => res.render('pages/register'))
   .post('/register', register, (req, res) => {
     res.redirect('/');
   })
-  .get('/display/:id', display, (req, res) => {
-    if (req.imageDescription == "null") {
-      req.imageDescription = "No description provided."
+  .get('/vertical-prototype', search, (req, res) => {
+
+    //It is here that we pass the results of the query to the renderer.
+    //The page will dynamically load data based on the results.
+    var searchResult = req.searchResult;
+    if (!req.photoID) {
+      req.photoID = 1
     }
-    res.render('pages/display', {
-      fileName: req.image,
-      name: req.imageName,
-      description: req.imageDescription,
-      category: req.imageCategory
+    res.render('pages/vertical-prototype', {
+      results: searchResult.length,
+      searchTerm: req.searchTerm,
+      searchResult: searchResult,
+      photoID: req.photoID,
+      category: req.category
     });
   })
-  .post('/display/:id', (req, res) => {
-    var photo = path.join(photoDirectory, req.body.fileName);
-    var extension = photo.split('.').pop()
-    res.download(photo, `StockOverflow-${req.params.id}.${extension}`);
+  .get('/display/:id', display, (req, res) => {
+    res.render('pages/display', {
+      fileName: req.imageName,
+      description: req.imageDescription
+    });
   })
-  .get('/upload', (req, res) => res.render('pages/upload', {
-    nameMessage: "",
-    nameValid: "",
-    descriptionMessage: "",
-    descriptionValid: "",
-    uploadMessage: ""
-  }))
+  .get('/upload', (req, res) => res.render('pages/upload'))
   .post('/upload', upload, (req, res) => {
     if (req.session.user == 'guest') {
       res.redirect('/login');
     } else {
-      res.render('pages/upload', {
-        nameMessage: req.nameMessage,
-        nameValid: req.nameValid,
-        descriptionMessage: req.descriptionMessage,
-        descriptionValid: req.descriptionValid,
-        uploadMessage: req.uploadMessage
-      });
+      res.redirect('back');
     }
   })
+
   .get('/about', (req, res) => res.render('pages/about'))
-  .get('/admin', (req, res) => res.render('pages/admin'))
-  .get('/password-reset', (req, res) => res.render('pages/password'))
+  .get('/admin', displayAll , (req, res) => {
+    res.render('pages/admin', {
+      results: req.results, // number of pictures
+      image: req.image,
+      description: req.imageDescription,
+      status:req.imageStatus,
+      photoID: req.photoID,
+      category: req.imageCategory
+    });
+  })
+  .post('/admin', displayAll, (req, res) =>{
+
+    var id = req.body.status.toString();
+    var splitID = id.split(".")
+    var imgID = splitID[0];
+    var imgStatus = splitID[1];
+
+    database.query('UPDATE Posting SET Status = ($1) WHERE ID = ($2)', [imgStatus, imgID]);
+    res.render('pages/admin', {
+      results: req.results, // number of pictures
+      image: req.image,
+      description: req.imageDescription,
+      status:req.imageStatus,
+      photoID: req.photoID,
+      category: req.imageCategory
+    });
+  })
+  .post('/admin')
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
   .get('/about/AndrewAndrawo', (req, res) => res.render('pages/aboutAndrew'))
