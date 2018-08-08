@@ -555,7 +555,7 @@ express()
     descriptionValid: "",
     uploadMessage: ""
   }))
-  .post('/upload', upload, (req, res) => {
+  .post('/upload', validateUser, upload, (req, res) => {
     if (req.session.user == 'guest') {
       res.redirect('/login');
     } else {
