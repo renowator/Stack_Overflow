@@ -163,7 +163,15 @@ function logout(req, res, next) {
 }
 
 function validateAdmin(req, res, next){
-
+  if (!req.session.user) {
+    req.session.user = 'guest'
+    req.session.userid = 1
+  }
+  res.locals = {
+    user: req.session.user,
+    id: req.session.userid
+  };
+  next();
 }
 
 function validateUser(req, res, next) {
@@ -337,14 +345,19 @@ express()
 
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/admin', displayAll , (req, res) => {
-    res.render('pages/admin', {
-      results: req.results, // number of pictures
-      image: req.image,
-      description: req.imageDescription,
-      status:req.imageStatus,
-      photoID: req.photoID,
-      category: req.imageCategory
-    });
+    if (req.session.user != 'admin'){
+      res.redirect('/login');
+    } else {
+      res.render('pages/admin', {
+
+        results: req.results, // number of pictures
+        image: req.image,
+        description: req.imageDescription,
+        status:req.imageStatus,
+        photoID: req.photoID,
+        category: req.imageCategory
+      });
+    }
   })
   .post('/admin', displayAll, (req, res) =>{
 
