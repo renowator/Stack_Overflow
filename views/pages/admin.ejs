@@ -4,34 +4,29 @@
 	<head>
 		<%- include ../partials/analytics.ejs %>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title> Upload Page</title>
+		<title> Admin Page</title>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
 		<style type="text/css">
-		
 			body {
 				margin:0;
 				padding:0;
 				font-family: Sans-Serif;
 				line-height: 1.5em;
 			}
-			
 			header {
 				background: lightblue;
 				height: 100px;
 			}
-			
 			header h1 {
 				margin: 0;
 				padding-top: 15px;
 			}
-			
 			main {
 				padding-bottom: 10010px;
 				margin-bottom: -10000px;
 				float: left;
 				width: 100%;
 			}
-			
 			nav {
 				padding-bottom: 10010px;
 				margin-bottom: -10000px;
@@ -40,7 +35,6 @@
 				margin-left: -230px;
 				background: #eee;
 			}
-			
 			footer {
 				clear: left;
 				width: 100%;
@@ -48,59 +42,91 @@
 				text-align: center;
 				padding: 4px 0;
 			}
-		
 			#wrapper {
 				overflow: hidden;
 			}
-						
 			#content {
 				margin-right: 230px; /* Same as 'nav' width */
 			}
-		
 		#description
 		{
-		
 		width = 800px;
 		font-size:14pt;
 		}
-			
 			.innertube {
 		text-align: center;
 				margin: 15px; /* Padding for content */
 				margin-top: 0;
 			}
-		
 			p {
 				color: #555;
 			}
-		
 			nav ul {
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
-			
 			nav ul a {
 				color: darkgreen;
 				text-decoration: none;
 			}
-		
 		</style>
-		
-	</head>
-	
-	<body>
-		<% include ../partials/nav.ejs %>
-		
-		<div id="wrapper">
-			
-			<main>
-				<div id="content">
-					<h1>You must be an admin to view this page. Please leave, or login as an admin.</h1></div>
-				</main>
-				
-				
-			</div>
-			
-		</body>
-	</html>
+		<script src="/jquery/jquery.js"></script>
+		<script>
+			$( document ).ready(function() {
+			var statusInput = document.getElementById('result');
+			var status = ['Accept', 'Reject'];
+			<% for (var i = 0; i < results; i++) { %>
+			document.getElementById('result').innerHTML += `<a href="display/<%= photoID[i] %>"><img src="/images/StockPhotos/Thumbnails/<%= image[i] %>" style="width:100px; height:100px;"></a><br>`;
+			//dynamically create a select options menu under each image
+			var select = document.createElement('select');
+			select.id = "status";
+			select.name = "status" //giving photoID to parse later
+	    statusInput.appendChild(select); //adds select list
+			//adding Accept / Reject options to select list
+			for (var j = 0; j < 2; j++){
+				var option = document.createElement('option');
+				option.text = status[j];
+				option.value = "<%= photoID[i] %>." + status[j];
+				select.appendChild(option);
+			}
+			//adding submit button
+			var submit = document.createElement("input");
+	    submit.setAttribute("type", "submit");
+	    statusInput.appendChild(submit);
+			//adding linebreak
+			var linebreak = document.createElement("br");
+	   	statusInput.appendChild(linebreak);
+			<% } %>
+			});
+			</script>
+
+
+
+
+		</head>
+
+		<body>
+			<% include ../partials/nav.ejs %>
+
+			<div id="wrapper">
+
+				<main>
+					<div id="content">
+						<h1>You must be an admin to view this page. Please leave, or login as an admin.</h1></div>
+					</main>
+
+
+
+				</div>
+
+				<div class="container">	<!-- Might be PUT instead of POST?? -->
+					<form action = "/admin" method = "post" class="needs-approval" >
+						<div class="column" id="result">
+						</div>
+
+					</form>
+				</div>
+
+			</body>
+		</html>

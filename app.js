@@ -35,6 +35,24 @@ var results = 0;
 const photoDirectory = path.join(__dirname, 'public/images/StockPhotos');
 const thumbnailDirectory = path.join(__dirname, 'public/images/StockPhotos/Thumbnails');
 
+// this function will display all of the images in the Database for admin page
+function displayAll(req, res, next){
+  database.query('SELECT * FROM Posting ORDER BY Status, Category DESC', (err, result) => {
+    if (err) {
+      console.log(err);
+      next();
+    }
+    req.photoID = result.rows.map(x => String(x.id));
+    req.image = result.rows.map(x => String(x.image));
+    req.imageDescription = result.rows.map(x => String(x.name));
+    req.imageStatus = result.rows.map(x => String(x.status));
+    req.imageCategory = result.rows.map(x => String(x.category));
+    req.results = result.rows.length;
+    next();
+
+  });
+}
+
 function display(req, res, next) {
   database.query('SELECT * FROM Posting WHERE ID = $1', [req.params.id], (err, result) => {
     if (err) {
@@ -548,6 +566,45 @@ express()
   })
   .get('/about', (req, res) => res.render('pages/about'))
   .get('/admin', (req, res) => res.render('pages/admin'))
+  .get('/admin', displayAll , (req, res) => {
+    if (req.session.user != 'admin'){
+      res.redirect('/login');
+    } else {
+      if (!req.results) {
+        req.results = 0;
+      }
+
+      res.render('pages/admin', {
+
+        results: req.results, // number of pictures
+        image: req.image,
+        description: req.imageDescription,
+        status:req.imageStatus,
+        photoID: req.photoID,
+        category: req.imageCategory
+      });
+    }
+  })
+  .post('/admin', displayAll, (req, res) =>{
+
+    var id = req.body.status.toString();
+    var splitID = id.split(".")
+    var imgID = splitID[0];
+    var imgStatus = splitID[1];
+
+    database.query('UPDATE Posting SET Status = ($1) WHERE ID = ($2)', [imgStatus, imgID]);
+    if (!req.results) {
+        req.results = 0;
+      }
+    res.render('pages/admin', {
+      results: req.results, // number of pictures
+      image: req.image,
+      description: req.imageDescription,
+      status:req.imageStatus,
+      photoID: req.photoID,
+      category: req.imageCategory
+    });
+  })
   .get('/password-reset', (req, res) => res.render('pages/password'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
