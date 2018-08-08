@@ -5,7 +5,7 @@ const {
   Client
 } = require('pg');
 const bcrypt = require('bcrypt');
-const session = require('express-session')
+const session = require('cookie-session')
 const formidable = require('formidable')
 const sharp = require('sharp')
 const ua = require("universal-analytics");
