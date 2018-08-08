@@ -375,7 +375,7 @@ function search(req, res, next) {
   var category = req.query.category;
 
   if (category === undefined || category === "") {
-    database.query('SELECT Image, ID FROM Posting WHERE Name ~~* $1', ['%' + searchTerm + '%'], (err, result) => {
+    database.query(`SELECT Image, ID FROM Posting WHERE Name ~~* $1 AND STATUS = 'Approved'`, ['%' + searchTerm + '%'], (err, result) => {
       if (err) {
         req.searchResult = "";
         req.searchTerm = "";
@@ -395,7 +395,7 @@ function search(req, res, next) {
       next();
     });
   } else {
-    database.query('SELECT Image, ID FROM Posting WHERE Category = $1 AND Name ~~* $2', [category, '%' + searchTerm + '%'], (err, result) => {
+    database.query(`SELECT Image, ID FROM Posting WHERE Category = $1 AND Name ~~* $2 AND STATUS = 'Approved'`, [category, '%' + searchTerm + '%'], (err, result) => {
       if (err) {
         req.searchResult = "";
         req.searchTerm = "";
@@ -547,7 +547,13 @@ express()
     }
   })
   .get('/about', (req, res) => res.render('pages/about'))
-  .get('/admin', (req, res) => res.render('pages/admin'))
+  .get('/admin', (req, res) => {
+    if (req.session.user != 'admin') {
+      res.redirect('/login');
+    } else {
+      res.render('pages/admin')
+    }
+  })
   .get('/password-reset', (req, res) => res.render('pages/password'))
   .get('/about/ScottPenn', (req, res) => res.render('pages/aboutScott'))
   .get('/about/AnDao', (req, res) => res.render('pages/aboutAn'))
