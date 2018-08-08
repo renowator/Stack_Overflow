@@ -124,7 +124,7 @@ function upload(req, res, next) {
       }
 
       validateUpload(req, res, next);
-      if (req.uploadValid == false) {
+      if (req.uploadValid == false || req.session.user == 'guest') {
         next();
       } else {
         sharp(path.join(photoDirectory, `${req.session.user}_${timestamp}.${extension}`))
@@ -556,7 +556,9 @@ express()
     uploadMessage: ""
   }))
   .post('/upload', validateUser, upload, (req, res) => {
+    console.log("servicing the request")
     if (req.session.user == 'guest') {
+      console.log("verified as guest")
       res.redirect('/login');
     } else {
       res.render('pages/upload', {
