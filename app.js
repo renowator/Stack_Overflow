@@ -559,7 +559,7 @@ express()
     console.log("servicing the request")
     if (req.session.user == 'guest') {
       console.log("verified as guest")
-      res.redirect('/login');
+      res.redirect('/');
     } else {
       res.render('pages/upload', {
         nameMessage: req.nameMessage,
